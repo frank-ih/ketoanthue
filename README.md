@@ -2,6 +2,10 @@
 
 Strategic product separate from AgentClan platform. Joins AgentClan Docker network for shared services.
 
+## Project Status
+
+Security review and code quality improvements applied. See PR for details.
+
 ## Architecture
 
 ```
