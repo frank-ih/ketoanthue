@@ -1,0 +1,87 @@
+# Ketoanthue Domain Agent Pipeline - Vietnamese Accounting AI
+# Version: 1.0
+
+name: ketoanthue
+description: AI Accountant for Vietnamese businesses - tax calculation, invoice processing, compliance checking
+
+steps:
+  - name: input_validation
+    config:
+      strategy: chat_fallback
+      enabled: true
+
+  - name: query_enhancement
+    config:
+      strategy: embedding_cosine
+      confidence_threshold: 0.7
+      hyde_enabled: true
+
+  - name: retrieval
+    config:
+      strategy: hybrid
+      top_k: 15
+      rrf_k: 60
+      intent_source_weights:
+        general_query:
+          vector: 0.5
+          bm25: 0.3
+          entity: 0.2
+        tax_query:
+          vector: 0.4
+          bm25: 0.4
+          entity: 0.2
+        invoice_query:
+          vector: 0.3
+          bm25: 0.5
+          entity: 0.2
+        compliance_query:
+          vector: 0.3
+          bm25: 0.3
+          entity: 0.4
+
+  - name: reranking
+    config:
+      strategy: cross_encoder
+      top_n: 5
+      min_rerank_score: 0.45
+
+  - name: claim_extraction
+    config:
+      strategy: llm_based
+      enabled: true
+      max_claims_per_chunk: 10
+      domain_entities:
+        - tax_rate
+        - invoice_number
+        - company_name
+        - tax_code
+        - amount
+        - date
+
+  - name: generation
+    config:
+      strategy: chain_of_thought
+      top_passages: 3
+      temperature: 0.2
+      prompt_version: ketoanthue_v1
+
+  - name: guardrails
+    config:
+      strategy: financial_accuracy_gate
+      confidence_threshold: 0.7
+      escalation_trigger: "Low confidence or sensitive tax/financial topic detected"
+      fallback_message: "Tôi cần xác minh thông tin này với đội ngũ kế toán. Đang chuyển tiếp..."
+
+  - name: citation
+    config:
+      strategy: numbered
+      max_citations: 10
+      source_format: regulation
+
+  - name: response_format
+    config:
+      strategy: formal
+      max_length: 1200
+      include_sources: true
+      citation_format: numbered
+      language: vi

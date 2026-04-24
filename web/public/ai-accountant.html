@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kế Toán AI — Trợ Lý Kế Toán Luôn Tuân Thủ | AgentClan</title>
+  <meta name="description" content="Kế Toán AI — Trợ lý kế toán viên 24/7 tuân thủ 26 chuẩn mực VAS. Tiết kiệm 70% chi phí, phản hồi dưới 30 giây. Dành cho SME Việt Nam.">
+  <link rel="canonical" href="https://agentclan.co/ai-accountant">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="icon" sizes="32x32" href="/favicon.ico">
+  <meta property="og:title" content="Kế Toán AI — Trợ Lý Kế Toán Luôn Tuân Thủ">
+  <meta property="og:description" content="AI kế toán tuân thủ 26 chuẩn mực VAS, Luật thuế GTGT 48/2024. Tiết kiệm 70% chi phí. Dành cho SME Việt Nam.">
+  <meta property="og:url" content="https://agentclan.co/ai-accountant">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="https://agentclan.co/og-accountant.png">
+  <meta property="og:locale" content="vi_VN">
+  <meta property="og:locale:alternate" content="en_US">
+  <meta property="og:site_name" content="AgentClan">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Kế Toán AI — Trợ Lý Kế Toán Luôn Tuân Thủ">
+  <meta name="twitter:description" content="AI kế toán tuân thủ 26 chuẩn mực VAS, Luật thuế GTGT 48/2024. Dành cho SME Việt Nam.">
+  <meta name="twitter:image" content="https://agentclan.co/og-accountant.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "Kế Toán AI",
+    "applicationCategory": "BusinessApplication",
+    "operatingSystem": "Web",
+    "description": "Trợ lý kế toán AI tuân thủ 26 chuẩn mực VAS, Luật thuế GTGT 48/2024",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "VND" },
+    "provider": { "@type": "Organization", "name": "AgentClan", "url": "https://agentclan.co" }
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Kế Toán AI có tuân thủ chuẩn mực kế toán Việt Nam không?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Có. Kế Toán AI tuân thủ 26 chuẩn mực VAS và các thông tư thuế hiện hành bao gồm Luật 71/2014/QH13, Thông tư 200/2014, Thông tư 119/2014, và Nghị định 70/2025." }
+      },
+      {
+        "@type": "Question",
+        "name": "Kế Toán AI tiết kiệm được bao nhiêu chi phí?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Kế Toán AI giúp tiết kiệm đến 70% chi phí so với thuê nhân sự kế toán truyền thống, vận hành 24/7 và xử lý hóa đơn thành báo cáo dưới 30 giây." }
+      },
+      {
+        "@type": "Question",
+        "name": "Kế Toán AI phù hợp với doanh nghiệp nào?",
+        "acceptedAnswer": { "@type": "Answer", "text": "Kế Toán AI được thiết kế cho doanh nghiệp SME Việt Nam, đặc biệt phù hợp với chủ doanh nghiệp tự làm sổ sách, doanh nghiệp nhỏ và vừa cần giải pháp kế toán tuân thủ với chi phí thấp." }
+      }
+    ]
+  }
+  </script>
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    :root{
+      --blue:       #2563eb;
+      --blue-h:     #3b82f6;
+      --blue-glow:  rgba(37,99,235,0.09);
+      --blue-bdr:   rgba(37,99,235,0.18);
+      --success:    #059669;
+      --danger:     #dc2626;
+      --bg:         #f8faff;
+      --bg-cool:    #eef3ff;
+      --bg-sky:     #e8f0fe;
+      --bg-slate:   #dce6f8;
+      --bg-dark:    #0c1a3a;
+      --surf:       #ffffff;
+      --surf-cool:  #f4f7ff;
+      --bdr:        rgba(15,30,80,0.10);
+      --bdr-cool:   rgba(37,99,235,0.15);
+      --text:       #0f1829;
+      --muted:      rgba(15,24,41,0.72);
+      --faint:      rgba(15,24,41,0.55);
+      --font: 'Albula Pro', 'Be Vietnam Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+      --mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, 'Courier New', monospace;
+    }
+    html{scroll-behavior:smooth;}
+    body{background:var(--bg);color:var(--text);font-family:var(--font);font-size:16px;line-height:1.65;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+    .container{max-width:1120px;margin:0 auto;padding:0 2rem;}
+
+    /* ── BUTTONS ── */
+    .btn{display:inline-flex;align-items:center;gap:6px;padding:10px 20px;border-radius:8px;font-family:var(--font);font-size:14px;font-weight:500;text-decoration:none;cursor:pointer;border:none;white-space:nowrap;transition:all .2s;letter-spacing:-.01em;}
+    .btn-primary{background:var(--blue);color:#fff;}
+    .btn-primary:hover{background:var(--blue-h);box-shadow:0 4px 22px rgba(37,99,235,.30);transform:translateY(-1px);}
+    .btn-ghost{background:transparent;color:var(--text);border:1px solid var(--bdr);}
+    .btn-ghost:hover{border-color:var(--bdr-cool);background:var(--bg-sky);}
+    .btn-dark-outline{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.28);}
+    .btn-dark-outline:hover{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.5);}
+    .btn-lg{padding:13px 28px;font-size:15px;border-radius:10px;}
+
+    /* ── NAV ── */
+    .nav{position:fixed;top:0;left:0;right:0;z-index:100;height:60px;padding:0 2rem;display:flex;align-items:center;background:rgba(248,250,255,.92);backdrop-filter:blur(16px) saturate(160%);border-bottom:1px solid var(--bdr);transition:box-shadow .3s,border-color .3s;}
+    .nav.scrolled{box-shadow:0 1px 20px rgba(15,24,41,.07);border-bottom-color:var(--bdr-cool);}
+    .nav-inner{width:100%;max-width:1120px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;}
+    .nav-logo{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);font-weight:500;font-size:14px;letter-spacing:-.01em;}
+    .nav-logo-mark{width:28px;height:28px;background:var(--blue);border-radius:6px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:white;font-weight:700;flex-shrink:0;}
+    .nav-logo-sub{font-size:10px;color:var(--faint);font-weight:400;display:block;line-height:1;}
+    .nav-links{display:flex;align-items:center;gap:28px;list-style:none;}
+    .nav-links a{text-decoration:none;color:var(--muted);font-size:14px;font-weight:400;transition:color .2s;}
+    .nav-links a:hover{color:var(--text);}
+    .nav-right{display:flex;align-items:center;gap:10px;}
+    .lsw{position:relative;display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:6px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:13px;font-family:var(--font);cursor:pointer;user-select:none;transition:border-color .2s;}
+    .lsw:hover{border-color:var(--bdr-cool);color:var(--text);}
+    .lsw-arrow{font-size:9px;opacity:.5;transition:transform .2s;}
+    .lsw.open .lsw-arrow{transform:rotate(180deg);}
+    .lsw-drop{display:none;position:absolute;top:calc(100% + 6px);right:0;min-width:140px;background:var(--surf);border:1px solid var(--bdr);border-radius:8px;overflow:hidden;z-index:200;box-shadow:0 8px 32px rgba(15,24,41,.10);}
+    .lsw.open .lsw-drop{display:block;}
+    .lsw-opt{display:flex;align-items:center;gap:6px;padding:9px 14px;font-size:13px;color:var(--muted);cursor:pointer;transition:background .15s;}
+    .lsw-opt:hover{background:var(--bg-sky);color:var(--text);}
+
+    /* ── HERO ── */
+    .hero{padding:120px 2rem 80px;position:relative;overflow:hidden;
+      background:
+        /* warm radial bokeh echoing the golden/ivory bokeh in Aiwen's image */
+        radial-gradient(ellipse 70% 55% at 68% 38%, rgba(255,248,225,.60) 0%, rgba(255,245,230,.30) 35%, transparent 65%),
+        /* warm ivory-to-sky gradient — Aiwen's image has warm cream tones that blend here */
+        linear-gradient(160deg, #fffdf8 0%, #fff9f0 30%, #f5f0ff 70%, #eef2ff 100%);
+    }
+    .hero::before{content:'';position:absolute;top:-120px;right:-80px;width:520px;height:520px;background:radial-gradient(circle,rgba(200,170,130,.06) 0%,transparent 65%);pointer-events:none;}
+    .hero::after{content:'';position:absolute;bottom:-60px;left:-60px;width:360px;height:360px;background:radial-gradient(circle,rgba(180,160,220,.05) 0%,transparent 65%);pointer-events:none;}
+    .hero-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;position:relative;z-index:1;}
+    .hero-badge{display:inline-flex;align-items:center;gap:7px;padding:5px 13px;border-radius:20px;border:1px solid var(--bdr-cool);background:var(--blue-glow);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--blue);margin-bottom:22px;}
+    .hero-badge-dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:blink 2s infinite;}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+    .hero-h1{font-size:clamp(36px,4.5vw,56px);font-weight:500;line-height:1.1;letter-spacing:-.025em;color:var(--text);margin-bottom:18px;}
+    .hero-h1 .accent{color:var(--blue);}
+    .hero-sub{font-size:16px;line-height:1.75;color:var(--muted);font-weight:400;margin-bottom:30px;max-width:480px;}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:22px;}
+    .hero-trust{font-size:12px;color:var(--faint);display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-weight:500;}
+    .hero-trust-sep{opacity:.35;}
+    .hero-img-wrap{border-radius:24px;overflow:visible;border:1px solid rgba(255,248,225,.35);box-shadow:
+      0 24px 80px rgba(180,160,120,.10),
+      0 0 0 1px rgba(255,252,245,.75),
+      0 8px 32px rgba(120,100,180,.08),
+      inset 0 0 40px rgba(255,250,240,.18);
+    aspect-ratio:3/4;position:relative;}
+    .hero-img-wrap svg{display:block;width:100%;height:100%;}
+    .hero-img-wrap img{width:150%;height:150%;object-fit:cover;border-radius:20px;object-position:center top;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);}
+
+    /* ── SECTIONS ── */
+    .section{padding:88px 0;}
+    .section-cool{background:var(--bg-cool);}
+    .section-sky{background:var(--bg-sky);}
+    .section-slate{background:var(--bg-slate);}
+    .section-white{background:var(--surf);}
+    .s-tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue);margin-bottom:12px;}
+    .s-h2{font-size:clamp(28px,3.2vw,44px);font-weight:500;line-height:1.13;letter-spacing:-.025em;color:var(--text);margin-bottom:14px;}
+    .s-h2 .accent{color:var(--blue);}
+    .s-sub{font-size:16px;color:var(--muted);font-weight:400;line-height:1.7;max-width:560px;}
+    .s-hdr{margin-bottom:52px;}
+    .s-hdr.center{text-align:center;}
+    .s-hdr.center .s-sub{margin:0 auto;}
+
+    /* ── COMPARE ── */
+    .compare-lead{text-align:center;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);margin-bottom:24px;}
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+    .ccard{border-radius:14px;padding:32px;border:1px solid var(--bdr);}
+    .ccard.prob{background:rgba(220,38,38,0.07);border-color:rgba(220,38,38,0.22);}
+    .ccard.sol{background:rgba(37,99,235,0.11);border-color:rgba(37,99,235,0.28);}
+    .ccard-hdr{display:flex;align-items:center;gap:12px;margin-bottom:22px;}
+    .ccard-icon{width:38px;height:38px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+    .ccard.prob .ccard-icon{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.18);}
+    .ccard.sol .ccard-icon{background:var(--blue-glow);border:1px solid var(--bdr-cool);}
+    .ccard-title{font-size:18px;font-weight:500;color:var(--text);letter-spacing:-.015em;}
+    .clist{list-style:none;display:flex;flex-direction:column;gap:11px;}
+    .citem{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--muted);line-height:1.55;}
+    .ci{flex-shrink:0;margin-top:1px;font-size:14px;font-weight:700;}
+    .ccard.prob .ci{color:var(--danger);}
+    .ccard.sol .ci{color:var(--success);}
+
+    /* ── FEATURES ── */
+    .feat-grid{display:grid;grid-template-columns:1fr;gap:2px;background:var(--bdr);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;}
+    .fcard{background:var(--surf);padding:28px 34px;transition:background .2s;}
+    .fcard:hover{background:var(--surf-cool);}
+    .fcard-header{display:flex;align-items:center;gap:16px;margin-bottom:14px;}
+    .fcard-ico{width:64px;height:64px;border-radius:14px;border:1px solid var(--bdr-cool);background:var(--blue-glow);display:flex;align-items:center;justify-content:center;font-size:30px;flex-shrink:0;}
+    .fcard-title{font-size:18px;font-weight:500;color:var(--text);margin-bottom:0;letter-spacing:-.015em;line-height:1.25;}
+    .fcard-body{font-size:14px;color:var(--muted);line-height:1.65;font-weight:400;}
+
+    /* ── COMPLIANCE ── */
+    .comp-wrap{display:grid;grid-template-columns:1fr 380px;gap:56px;align-items:start;}
+    .comp-table{border:1px solid var(--bdr);border-radius:14px;overflow:hidden;}
+    .comp-row{display:grid;grid-template-columns:200px 1fr auto;align-items:center;gap:16px;padding:16px 22px;border-bottom:1px solid var(--bdr);transition:background .15s;}
+    .comp-row:last-child{border-bottom:none;}
+    .comp-row:hover{background:var(--bg-cool);}
+    .comp-code{font-family:var(--mono);font-size:12px;color:#1e40af;font-weight:600;}
+    .comp-name{font-size:13px;color:rgba(15,24,41,0.82);line-height:1.45;}
+    .comp-type{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;padding:3px 10px;border-radius:10px;white-space:nowrap;}
+    .ct-law{background:rgba(220,38,38,.12);color:#991b1b;border:1px solid rgba(220,38,38,.28);}
+    .ct-circ{background:rgba(37,99,235,.12);color:#1e40af;border:1px solid rgba(37,99,235,.28);}
+    .ct-decree{background:rgba(217,119,6,.14);color:#92400e;border:1px solid rgba(217,119,6,.3);}
+    .comp-note{display:flex;align-items:center;gap:8px;margin-top:20px;font-size:13px;color:rgba(15,24,41,0.72);}
+    .comp-note-dot{width:6px;height:6px;border-radius:50%;background:var(--success);animation:blink 2s infinite;flex-shrink:0;}
+    .comp-visual{border-radius:16px;overflow:hidden;border:1px solid var(--bdr-cool);aspect-ratio:1;background:var(--bg-sky);}
+    .comp-visual svg{display:block;width:100%;height:100%;}
+
+    /* ── FLOW ── */
+    .flow-svg-wrap{border-radius:16px;overflow:hidden;border:1px solid var(--bdr-cool);background:var(--bg-cool);width:70%;margin:0 auto;}
+    .flow-svg-wrap svg{display:block;width:100%;height:auto;}
+    .flow-note{text-align:center;margin-top:20px;font-size:13px;color:var(--faint);}
+
+    /* ── PROOF ── */
+    .proof-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--bdr);border:1px solid var(--bdr);border-radius:16px;overflow:hidden;}
+    .pcard{background:var(--surf);padding:52px 40px;text-align:center;transition:background .2s;}
+    .pcard:hover{background:var(--surf-cool);}
+    .pcard-icon{font-size:48px;display:block;margin-bottom:18px;}
+    .pcard-num{font-family:var(--mono);font-size:58px;font-weight:500;color:var(--blue);display:block;line-height:1;margin-bottom:13px;}
+    .pcard-label{font-size:20px;font-weight:500;color:var(--text);margin-bottom:9px;letter-spacing:-.01em;}
+    .pcard-sub{font-size:16px;color:var(--faint);line-height:1.6;}
+
+    /* ── CTA ── */
+    .cta-section{background:var(--bg-dark);padding:96px 2rem;text-align:center;position:relative;overflow:hidden;}
+    .cta-section::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:700px;height:350px;background:radial-gradient(ellipse,rgba(37,99,235,.20) 0%,transparent 70%);pointer-events:none;}
+    .cta-h2{position:relative;font-size:clamp(32px,4.5vw,52px);font-weight:500;line-height:1.1;letter-spacing:-.025em;color:#fff;margin-bottom:12px;}
+    .cta-h2 .accent{color:#93c5fd;}
+    .cta-sub{position:relative;font-size:16px;color:rgba(255,255,255,.50);font-weight:400;margin-bottom:32px;}
+    .cta-actions{position:relative;display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+
+    /* ── FOOTER ── */
+    .footer{background:var(--bg-cool);border-top:1px solid var(--bdr);padding:36px 0;}
+    .footer-inner{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;}
+    .footer-logo{display:flex;align-items:center;gap:8px;font-weight:500;font-size:14px;color:var(--text);}
+    .footer-logo-mark{width:24px;height:24px;background:var(--blue);border-radius:5px;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:10px;color:white;font-weight:700;}
+    .footer-links{display:flex;gap:22px;list-style:none;}
+    .footer-links a{font-size:13px;color:var(--faint);text-decoration:none;transition:color .2s;font-weight:500;}
+    .footer-links a:hover{color:var(--muted);}
+    .footer-copy{font-size:13px;color:var(--faint);}
+
+    /* ── ANIMATIONS ── */
+    [data-a]{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease;}
+    [data-a].in{opacity:1;transform:none;}
+    #fileban{display:none;position:fixed;top:0;left:0;right:0;z-index:999;background:#fff7ed;border-bottom:1px solid #fed7aa;color:#7c2d12;font-size:13px;line-height:1.5;padding:10px 44px 10px 16px;text-align:center;}
+    #fileban.show{display:block;}
+    #fileban code{background:#fde68a;padding:1px 6px;border-radius:4px;font-size:12px;}
+    #fileban-close{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:16px;opacity:.6;}
+    #fileban-close:hover{opacity:1;}
+    body.has-fileban{padding-top:44px;}
+    [data-d="1"]{transition-delay:.10s}[data-d="2"]{transition-delay:.20s}[data-d="3"]{transition-delay:.30s}
+
+    /* ── RESPONSIVE ── */
+    @media(max-width:900px){
+      .hero-inner,.comp-wrap,.hero-img-wrap{display:block;width:100%;}
+      .hero-img-wrap{margin-bottom:32px;}
+      .hero{padding:100px 2rem 56px;}
+      .compare-grid,.feat-grid{grid-template-columns:1fr;}
+      .proof-grid{grid-template-columns:1fr;}
+      .nav-links{display:none;}
+    }
+    @media(max-width:600px){
+      .hero-h1{font-size:32px;}
+      .hero-img-wrap{aspect-ratio:4/3;overflow:visible;}
+      .hero-img-wrap img{width:130%;height:130%;}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- file:// protocol warning banner -->
+  <div id="fileban">
+    <span>⚠️</span>
+    <span>Đang mở qua <strong>file://</strong> — Chrome chặn một số tính năng.
+      Để hiển thị đúng: mở Terminal, <code>cd</code> vào thư mục chứa file, chạy
+      <code>python3 start-server.py</code> rồi mở <strong>http://localhost:8080</strong>
+    </span>
+    <span id="fileban-close" onclick="this.parentNode.classList.remove('show');document.body.classList.remove('has-fileban')">✕</span>
+  </div>
+
+
+<!-- NAV -->
+<nav class="nav" id="navbar">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-mark">n</div>
+      <div style="display:flex;flex-direction:column;line-height:1.1;">
+        <span>AgentClan</span>
+        <span class="nav-logo-sub" data-i18n="nav-sub">Kế Toán AI</span>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/blog">Blog</a></li>
+      <li><a href="#features"    data-i18n="nav-feat">Tính năng</a></li>
+      <li><a href="#compliance"  data-i18n="nav-comp">Tuân thủ</a></li>
+      <li><a href="#integration" data-i18n="nav-integ">Tích hợp</a></li>
+      <li><a href="#proof"       data-i18n="nav-proof">Bằng chứng</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lsw" id="lsw">
+        <span data-i18n="lang-cur">🇻🇳 Việt</span><span class="lsw-arrow">▾</span>
+        <div class="lsw-drop"><div class="lsw-opt" data-lang="en">🇬🇧 English</div></div>
+      </div>
+      <a href="https://agentclan.co/login/accounting" class="btn btn-primary" data-i18n="nav-cta">Dùng thử miễn phí</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════ HERO ══════════════ -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-inner">
+      <div data-a>
+        <div class="hero-badge"><div class="hero-badge-dot"></div><span data-i18n="hero-badge">Kế Toán Việt Nam Được Điều Khiển Bằng AI</span></div>
+        <h1 class="hero-h1">
+          <span data-i18n="hero-h1a">Kế Toán Viên AI</span><br>
+          <span class="accent" data-i18n="hero-h1b">Luôn Tuân Thủ Mọi Quy Định</span>
+        </h1>
+        <p class="hero-sub" data-i18n="hero-sub">Từ quét OCR biên nhận đến báo cáo tài chính sẵn sàng kiểm toán — Kế Toán Viên AI xử lý luật thuế Việt Nam, xác thực hóa đơn điện tử và tuân thủ thời gian thực để đội của bạn tập trung vào quyết định, không phải nhập liệu.</p>
+        <div class="hero-actions">
+          <a href="https://agentclan.co/login/accounting" class="btn btn-primary btn-lg" data-i18n="hero-cta1">Dùng thử miễn phí</a>
+          <a href="#integration" class="btn btn-ghost btn-lg" data-i18n="hero-cta2">Xem demo trực tiếp</a>
+        </div>
+        <div class="hero-trust">
+          <span data-i18n="trust-1">Chủ doanh nghiệp không nên tự tay nhập hóa đơn<br/>lúc 11 giờ đêm.</span><span class="hero-trust-sep">·</span>
+          <span>SOC 2 compliant</span><span class="hero-trust-sep">·</span>
+          <span data-i18n="trust-3">Dữ liệu lưu trú tại Việt Nam</span>
+        </div>
+      </div>
+
+      <!-- Aiwen image -->
+      <div class="hero-img-wrap" data-a data-d="1">
+        <img
+          src="/static/landing/Aiwen - AI Accountant.jpg"
+          alt="Ái Quyên — Kế Toán AI Agent"
+          style="width:100%;height:100%;object-fit:cover;border-radius:20px;"
+        />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ COMPARE ══════════════ -->
+<section class="section section-cool" id="compare">
+  <div class="container">
+    <div class="s-hdr center" data-a>
+      <span class="s-tag" data-i18n="cmp-tag">So sánh quy trình</span>
+      <h2 class="s-h2" data-i18n="cmp-h2">Hai con đường. <span class="accent">Một lựa chọn rõ ràng.</span></h2>
+      <p class="s-sub" data-i18n="cmp-sub">Xem sự khác biệt giữa kế toán thủ công và độ chính xác có AI hỗ trợ.</p>
+    </div>
+    <p class="compare-lead" data-i18n="cmp-lead">Chọn thực tế kế toán của bạn</p>
+    <div class="compare-grid" data-a>
+      <article class="ccard prob">
+        <div class="ccard-hdr"><div class="ccard-icon">✗</div><h3 class="ccard-title" data-i18n="w-title">Không có AgentClan</h3></div>
+        <ul class="clist">
+          <li class="citem"><span class="ci">✗</span><span data-i18n="w1">Nhập liệu thủ công trên các bảng tính rời rạc</span></li>
+          <li class="citem"><span class="ci">✗</span><span data-i18n="w2">"Quy định nào áp dụng cho hóa đơn này?" — không thể trả lời nhanh</span></li>
+          <li class="citem"><span class="ci">✗</span><span data-i18n="w3">Đóng sổ cuối tháng: <strong>5–7 ngày</strong> đối chiếu</span></li>
+          <li class="citem"><span class="ci">✗</span><span data-i18n="w4">Lo lắng hạn nộp thuế — "Liệu chúng tôi nộp đúng chưa?"</span></li>
+          <li class="citem"><span class="ci">✗</span><span data-i18n="w5">Chuyển giao giữa Sales và Kế toán = nhập lại dữ liệu và sai sót</span></li>
+        </ul>
+      </article>
+      <article class="ccard sol">
+        <div class="ccard-hdr"><div class="ccard-icon">✓</div><h3 class="ccard-title" data-i18n="s-title">Với Kế Toán Viên AI</h3></div>
+        <ul class="clist">
+          <li class="citem"><span class="ci" style="color:var(--success)">✓</span><span data-i18n="s1">Biên nhận → Bút toán trong vài giây (OCR + phân loại tự động)</span></li>
+          <li class="citem"><span class="ci" style="color:var(--success)">✓</span><span data-i18n="s2">Tra cứu quy định thời gian thực tích hợp trong mọi câu trả lời</span></li>
+          <li class="citem"><span class="ci" style="color:var(--success)">✓</span><span data-i18n="s3">Đóng sổ cuối tháng: <strong>tính bằng giờ, không phải ngày</strong></span></li>
+          <li class="citem"><span class="ci" style="color:var(--success)">✓</span><span data-i18n="s4">Theo dõi hạn nộp tự động với đầy đủ audit trail (nhật ký kiểm toán)</span></li>
+          <li class="citem"><span class="ci" style="color:var(--success)">✓</span><span data-i18n="s5">Chuyển giao A2A liền mạch — Sales đóng deal → Kế toán nhận ngay</span></li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ AIWEN AVATAR + FLOW DIAGRAM ══════════════ -->
+<section class="section section-white" id="avatar">
+  <div class="container">
+    <div class="s-hdr center" data-a>
+      <span class="s-tag">Ái Quyên — Kế Toán Viên AI</span>
+      <h2 class="s-h2">Từ biên nhận đến báo cáo tài chính,<br><span class="accent">hoàn toàn tự động</span></h2>
+      <p class="s-sub">Quy trình xử lý hóa đơn từ đầu vào đến sổ cái — mỗi bước được AI kiểm tra và tuân thủ quy định Việt Nam.</p>
+    </div>
+    <div class="flow-svg-wrap" data-a>
+      <svg viewBox="0 0 520 416" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="hbg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#0c1a3a"/><stop offset="100%" stop-color="#112348"/></linearGradient>
+          <radialGradient id="bglow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#2563eb" stop-opacity="0.18"/><stop offset="100%" stop-color="#2563eb" stop-opacity="0"/></radialGradient>
+          <filter id="glow2"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <rect width="520" height="416" fill="url(#hbg)"/>
+        <g stroke="#ffffff" stroke-width="0.3" opacity="0.04">
+          <line x1="0" y1="104" x2="520" y2="104"/><line x1="0" y1="208" x2="520" y2="208"/><line x1="0" y1="312" x2="520" y2="312"/>
+          <line x1="130" y1="0" x2="130" y2="416"/><line x1="260" y1="0" x2="260" y2="416"/><line x1="390" y1="0" x2="390" y2="416"/>
+        </g>
+        <circle cx="260" cy="208" r="140" fill="url(#bglow)"/>
+
+        <!-- TOP LABELS -->
+        <rect x="22" y="18" width="120" height="24" rx="12" fill="#1e3a6e" stroke="#3b82f6" stroke-width="1"/>
+        <text x="82" y="34" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#93c5fd">📷 Ảnh biên nhận</text>
+        <rect x="200" y="14" width="120" height="26" rx="13" fill="#0f1f44" stroke="#2563eb" stroke-width="1.5"/>
+        <text x="260" y="31" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="500" fill="#60a5fa">Kế Toán AI · Tự động</text>
+        <rect x="378" y="18" width="118" height="24" rx="12" fill="#0a2010" stroke="#059669" stroke-width="1"/>
+        <text x="437" y="34" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#6ee7b7">✓ Vào sổ cái tự động</text>
+
+        <!-- LEFT PANEL: Receipt -->
+        <rect x="18" y="58" width="148" height="206" rx="12" fill="#132040" stroke="#2563eb" stroke-width="1.5"/>
+        <rect x="18" y="58" width="148" height="30" rx="12" fill="#1e3a6e" opacity="0.9"/>
+        <rect x="18" y="77" width="148" height="11" fill="#1e3a6e" opacity="0.9"/>
+        <text x="92" y="78" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="500" fill="#93c5fd">HÓA ĐƠN GTGT · Mẫu 01</text>
+        <rect x="30" y="99" width="108" height="6" rx="3" fill="#2563eb" opacity="0.5"/>
+        <rect x="30" y="109" width="86" height="4" rx="2" fill="#3b82f6" opacity="0.3"/>
+        <rect x="30" y="117" width="96" height="4" rx="2" fill="#3b82f6" opacity="0.3"/>
+        <rect x="30" y="125" width="74" height="4" rx="2" fill="#3b82f6" opacity="0.3"/>
+        <rect x="30" y="133" width="88" height="4" rx="2" fill="#3b82f6" opacity="0.3"/>
+        <rect x="30" y="141" width="65" height="4" rx="2" fill="#3b82f6" opacity="0.3"/>
+        <line x1="30" y1="154" x2="150" y2="154" stroke="#2563eb" stroke-width="0.8" opacity="0.4"/>
+        <text x="30" y="170" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#93c5fd">Tổng cộng</text>
+        <text x="150" y="170" text-anchor="end" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="500" fill="#60a5fa">12.500.000 ₫</text>
+        <rect x="30" y="178" width="68" height="18" rx="9" fill="#1e3a6e" stroke="#2563eb" stroke-width="1"/>
+        <text x="64" y="191" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#93c5fd">VAT 10%</text>
+        <!-- OCR badge animated -->
+        <rect x="30" y="224" width="106" height="22" rx="11" fill="#2563eb" fill-opacity="0.22" stroke="#2563eb" stroke-width="1"/>
+        <circle cx="43" cy="235" r="4" fill="#3b82f6"><animate attributeName="opacity" values="1;0.3;1" dur="1.2s" repeatCount="indefinite"/></circle>
+        <text x="95" y="240" text-anchor="end" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#93c5fd">OCR đang xử lý...</text>
+
+        <!-- DATA PACKETS: left → center -->
+        <path d="M166 158 Q190 158 196 175 Q200 188 206 200" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="6 3" opacity="0.45"><animate attributeName="stroke-dashoffset" values="18;0" dur="1s" repeatCount="indefinite"/></path>
+        <path d="M166 200 Q186 200 204 200" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="6 3" opacity="0.35"><animate attributeName="stroke-dashoffset" values="18;0" dur="1s" begin="0.3s" repeatCount="indefinite"/></path>
+        <circle r="5" fill="#60a5fa" filter="url(#glow2)"><animateMotion dur="2s" begin="0.2s" repeatCount="indefinite" path="M166,158 Q190,158 196,175 Q200,188 206,200"/><animate attributeName="opacity" values="0;1;1;0" dur="2s" begin="0.2s" repeatCount="indefinite"/></circle>
+        <circle r="4" fill="#93c5fd" filter="url(#glow2)"><animateMotion dur="2s" begin="1.1s" repeatCount="indefinite" path="M166,200 Q186,200 204,200"/><animate attributeName="opacity" values="0;1;1;0" dur="2s" begin="1.1s" repeatCount="indefinite"/></circle>
+
+        <!-- CENTER: AI brain node -->
+        <circle cx="260" cy="208" r="56" fill="#0f1f44" stroke="#2563eb" stroke-width="2"/>
+        <circle cx="260" cy="208" r="45" fill="#132040" opacity="0.85"/>
+        <circle cx="260" cy="208" r="52" fill="none" stroke="#3b82f6" stroke-width="1" stroke-dasharray="14 7"><animateTransform attributeName="transform" type="rotate" from="0 260 208" to="360 260 208" dur="9s" repeatCount="indefinite"/></circle>
+        <text x="260" y="198" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#93c5fd" letter-spacing="0.5">KẾ TOÁN</text>
+        <text x="260" y="214" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="12" fill="#60a5fa">AI ✦</text>
+        <text x="260" y="229" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#3b82f6">49 kiểm tra</text>
+        <circle cx="260" cy="208" r="56" fill="none" stroke="#2563eb" stroke-width="1"><animate attributeName="r" values="56;76;56" dur="3s" repeatCount="indefinite"/><animate attributeName="opacity" values="0.45;0;0.45" dur="3s" repeatCount="indefinite"/></circle>
+
+        <!-- DATA PACKETS: center → right -->
+        <path d="M314 200 Q334 200 340 188 Q346 172 354 165" stroke="#059669" stroke-width="1.5" fill="none" stroke-dasharray="6 3" opacity="0.45"><animate attributeName="stroke-dashoffset" values="18;0" dur="1s" begin="0.5s" repeatCount="indefinite"/></path>
+        <path d="M314 208 Q332 208 350 200" stroke="#059669" stroke-width="1.5" fill="none" stroke-dasharray="6 3" opacity="0.35"><animate attributeName="stroke-dashoffset" values="18;0" dur="1s" begin="0.8s" repeatCount="indefinite"/></path>
+        <circle r="5" fill="#34d399" filter="url(#glow2)"><animateMotion dur="1.8s" begin="1.4s" repeatCount="indefinite" path="M314,200 Q334,200 340,188 Q346,172 354,165"/><animate attributeName="opacity" values="0;1;1;0" dur="1.8s" begin="1.4s" repeatCount="indefinite"/></circle>
+
+        <!-- RIGHT PANEL: GL Entries -->
+        <rect x="354" y="58" width="148" height="206" rx="12" fill="#0a2010" stroke="#059669" stroke-width="1.5"/>
+        <rect x="354" y="58" width="148" height="30" rx="12" fill="#0d2e18" opacity="0.9"/>
+        <rect x="354" y="77" width="148" height="11" fill="#0d2e18" opacity="0.9"/>
+        <text x="428" y="78" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="500" fill="#6ee7b7">BÚT TOÁN GL · Tự động</text>
+        <text x="364" y="102" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="8" fill="#86efac" opacity="0.6" letter-spacing="0.4">TÀI KHOẢN</text>
+        <text x="494" y="102" text-anchor="end" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="8" fill="#86efac" opacity="0.6">SỐ TIỀN</text>
+        <!-- Ledger rows appear with staggered animation -->
+        <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.4s" begin="1.8s" fill="freeze"/>
+          <rect x="364" y="108" width="126" height="20" rx="5" fill="#0d2e18" stroke="#059669" stroke-width="0.8"/>
+          <text x="370" y="122" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#6ee7b7">133 — Thuế GTGT</text>
+          <text x="484" y="122" text-anchor="end" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" font-weight="500" fill="#34d399">Dr 1.136.364</text>
+        </g>
+        <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.4s" begin="2.1s" fill="freeze"/>
+          <rect x="364" y="132" width="126" height="20" rx="5" fill="#0d2e18" stroke="#059669" stroke-width="0.8"/>
+          <text x="370" y="146" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#6ee7b7">156 — Hàng hóa</text>
+          <text x="484" y="146" text-anchor="end" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" font-weight="500" fill="#34d399">Dr 11.363.636</text>
+        </g>
+        <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.4s" begin="2.4s" fill="freeze"/>
+          <rect x="364" y="156" width="126" height="20" rx="5" fill="#0d2e18" stroke="#059669" stroke-width="0.8"/>
+          <text x="370" y="170" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#e2faf1">331 — Phải trả NCC</text>
+          <text x="484" y="170" text-anchor="end" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" font-weight="500" fill="#4ade80">Cr 12.500.000</text>
+        </g>
+        <!-- Verified badge animated -->
+        <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.5s" begin="2.7s" fill="freeze"/>
+          <rect x="364" y="188" width="126" height="24" rx="12" fill="#059669" fill-opacity="0.18" stroke="#059669" stroke-width="1"/>
+          <text x="427" y="204" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="500" fill="#34d399">✓ Tuân thủ TT 200/2014</text>
+        </g>
+        <!-- Compliance check progress -->
+        <text x="364" y="232" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#6ee7b7" opacity="0.7">Kiểm tra tuân thủ</text>
+        <rect x="364" y="238" width="126" height="6" rx="3" fill="#0d2e18"/>
+        <rect x="364" y="238" width="0" height="6" rx="3" fill="#059669"><animate attributeName="width" values="0;126;126" dur="1.5s" begin="3s" fill="freeze"/></rect>
+
+        <!-- BOTTOM STATUS BAR -->
+        <rect x="130" y="322" width="260" height="44" rx="12" fill="#132040" stroke="#2563eb" stroke-width="1" opacity="0.95"/>
+        <circle cx="150" cy="340" r="4.5" fill="#34d399"><animate attributeName="opacity" values="1;0.3;1" dur="1.5s" repeatCount="indefinite"/></circle>
+        <text x="162" y="336" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="500" fill="#e2e8f0">49 kiểm tra · xử lý &lt;5s · Thông tư 200</text>
+        <text x="162" y="354" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#93c5fd">Cập nhật quy định tự động trong 24h</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ FEATURES ══════════════ -->
+<section class="section section-white" id="features">
+  <div class="container">
+    <div class="s-hdr center" data-a>
+      <span class="s-tag" data-i18n="feat-tag">Năng lực cốt lõi</span>
+      <h2 class="s-h2" data-i18n="feat-h2">Mọi công việc kế toán, <span class="accent">đều tự động</span></h2>
+      <p class="s-sub" data-i18n="feat-sub">Từ biên nhận thô đến báo cáo sẵn sàng cho phòng họp — Kế Toán Viên AI bao phủ toàn bộ vòng đời kế toán.</p>
+    </div>
+    <div class="feat-grid" data-a>
+      <div class="fcard">
+        <div class="fcard-header"><div class="fcard-ico">📝</div><h3 class="fcard-title" data-i18n="f1-title">Xử Lý Hóa Đơn</h3></div>
+        <p class="fcard-body" data-i18n="f1-body">Quét OCR, đối chiếu 3 bên và phân loại GL — biên nhận trở thành bút toán không cần nhập tay. Hỗ trợ định dạng hóa đơn điện tử Việt Nam (Mẫu 01 GTGT, 02 GTGT) ngay từ đầu.</p>
+      </div>
+      <div class="fcard">
+        <div class="fcard-header"><div class="fcard-ico">🛡️</div><h3 class="fcard-title" data-i18n="f2-title">Tuân Thủ Thuế</h3></div>
+        <p class="fcard-body" data-i18n="f2-body">Kiến thức luật thuế Việt Nam thời gian thực: Luật 71/2014, Thông tư 119/2014, Nghị định 70/2025. Cập nhật tự động khi quy định thay đổi — không cần cập nhật thủ công.</p>
+      </div>
+      <div class="fcard">
+        <div class="fcard-header"><div class="fcard-ico">💰</div><h3 class="fcard-title" data-i18n="f3-title">Quản Lý Công Nợ AP/AR</h3></div>
+        <p class="fcard-body" data-i18n="f3-body">Định tuyến hóa đơn tự động, theo dõi thu hồi và báo cáo tuổi nợ — công nợ của bạn được quản lý chủ động với dashboard thời gian thực và nhắc nhở tự động.</p>
+      </div>
+      <div class="fcard">
+        <div class="fcard-header"><div class="fcard-ico">📊</div><h3 class="fcard-title" data-i18n="f4-title">Báo Cáo Tài Chính</h3></div>
+        <p class="fcard-body" data-i18n="f4-body">P&amp;L, Bảng Cân Đối, Báo Cáo Lưu Chuyển Tiền Tệ — tạo từ sổ cái trong vài giây, sẵn sàng cho CFO xem xét. Tuân theo chuẩn phân loại Thông tư 200/2014/TT-BTC.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ COMPLIANCE ══════════════ -->
+<section class="section section-sky" id="compliance">
+  <div class="container">
+    <div class="s-hdr center" data-a>
+      <span class="s-tag" data-i18n="comp-tag">Ngăn xếp quy định Việt Nam</span>
+      <h2 class="s-h2" data-i18n="comp-h2">Xây dựng trên <span class="accent">luật thuế Việt Nam thời gian thực</span></h2>
+    </div>
+    <div class="comp-wrap" data-a>
+      <div>
+        <p style="font-size:16px;color:var(--muted);line-height:1.7;margin-bottom:28px;" data-i18n="comp-intro">Kế Toán Viên AI không chỉ "biết kế toán" — nó biết luật kế toán Việt Nam cụ thể, với mọi quy định được ingested (nạp vào), lập chỉ mục và có thể truy vấn thời gian thực.</p>
+        <div class="comp-table">
+          <div class="comp-row"><span class="comp-code">Luật 71/2014/QH13</span><span class="comp-name">Luật Kế toán — Accounting Law of Vietnam</span><span class="comp-type ct-law" data-i18n="t-law">Luật</span></div>
+          <div class="comp-row"><span class="comp-code">Thông tư 200/2014</span><span class="comp-name">Hướng dẫn ghi chứng từ kế toán — Sơ đồ tài khoản</span><span class="comp-type ct-circ" data-i18n="t-circ">Thông tư</span></div>
+          <div class="comp-row"><span class="comp-code">Thông tư 119/2014</span><span class="comp-name">Hướng dẫn hóa đơn điện tử — E-invoice procedures</span><span class="comp-type ct-circ" data-i18n="t-circ">Thông tư</span></div>
+          <div class="comp-row"><span class="comp-code">Nghị định 70/2025</span><span class="comp-name">Sửa đổi hóa đơn điện tử — Amended e-invoice decree</span><span class="comp-type ct-decree" data-i18n="t-decree">Nghị định</span></div>
+          <div class="comp-row"><span class="comp-code">Luật Thuế GTGT 48/2024</span><span class="comp-name">Luật Thuế Giá Trị Gia Tăng — VAT Law (sửa đổi 2024)</span><span class="comp-type ct-law" data-i18n="t-law">Luật</span></div>
+        </div>
+        <div class="comp-note"><div class="comp-note-dot"></div><span data-i18n="comp-note">Quy định được giám sát liên tục và cập nhật trong 24h sau khi ban hành</span></div>
+      </div>
+      <!-- Compliance SVG illustration -->
+      <div class="comp-visual">
+        <svg viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="cbg" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#e8f0fe"/><stop offset="100%" stop-color="#dce6f8"/></linearGradient>
+          </defs>
+          <rect width="380" height="380" fill="url(#cbg)"/>
+          <!-- Stacked document cards representing regulations -->
+          <!-- Document stack shadow layers -->
+          <rect x="72" y="64" width="236" height="58" rx="10" fill="#c7d9f8" opacity="0.5"/>
+          <rect x="66" y="58" width="236" height="58" rx="10" fill="#d4e4ff" opacity="0.7"/>
+          <!-- Card 1: Luật 71 — appears first -->
+          <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.5s" begin="0.3s" fill="freeze"/>
+            <rect x="60" y="52" width="260" height="60" rx="11" fill="white" stroke="#dc2626" stroke-width="1.5"/>
+            <rect x="60" y="52" width="260" height="60" rx="11" fill="#dc2626" fill-opacity="0.04"/>
+            <text x="76" y="74" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#dc2626">Luật 71/2014/QH13</text>
+            <text x="76" y="90" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#64748b">Luật Kế Toán Việt Nam</text>
+            <rect x="210" y="64" width="38" height="18" rx="9" fill="#dc2626" fill-opacity="0.1" stroke="#dc2626" stroke-width="1"/>
+            <text x="229" y="77" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#dc2626">Luật</text>
+          </g>
+          <!-- Card 2: TT200 -->
+          <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.5s" begin="0.7s" fill="freeze"/>
+            <rect x="60" y="126" width="260" height="60" rx="11" fill="white" stroke="#2563eb" stroke-width="1.5"/>
+            <rect x="60" y="126" width="260" height="60" rx="11" fill="#2563eb" fill-opacity="0.04"/>
+            <text x="76" y="148" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#2563eb">Thông tư 200/2014/TT-BTC</text>
+            <text x="76" y="164" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#64748b">Hướng dẫn ghi chứng từ kế toán</text>
+            <rect x="196" y="138" width="52" height="18" rx="9" fill="#2563eb" fill-opacity="0.08" stroke="#2563eb" stroke-width="1"/>
+            <text x="222" y="151" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#2563eb">Thông tư</text>
+          </g>
+          <!-- Card 3: TT119 -->
+          <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.5s" begin="1.1s" fill="freeze"/>
+            <rect x="60" y="200" width="260" height="60" rx="11" fill="white" stroke="#3b82f6" stroke-width="1.5"/>
+            <rect x="60" y="200" width="260" height="60" rx="11" fill="#3b82f6" fill-opacity="0.04"/>
+            <text x="76" y="222" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#3b82f6">Thông tư 119/2014/TT-BTC</text>
+            <text x="76" y="238" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#64748b">Hướng dẫn hóa đơn điện tử</text>
+            <rect x="196" y="212" width="52" height="18" rx="9" fill="#3b82f6" fill-opacity="0.08" stroke="#3b82f6" stroke-width="1"/>
+            <text x="222" y="225" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#3b82f6">Thông tư</text>
+          </g>
+          <!-- Card 4: NĐ 70 -->
+          <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.5s" begin="1.5s" fill="freeze"/>
+            <rect x="60" y="274" width="260" height="60" rx="11" fill="white" stroke="#d97706" stroke-width="1.5"/>
+            <rect x="60" y="274" width="260" height="60" rx="11" fill="#d97706" fill-opacity="0.04"/>
+            <text x="76" y="296" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#d97706">Nghị định 70/2025/NĐ-CP</text>
+            <text x="76" y="312" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#64748b">Sửa đổi hóa đơn điện tử</text>
+            <rect x="202" y="286" width="48" height="18" rx="9" fill="#d97706" fill-opacity="0.08" stroke="#d97706" stroke-width="1"/>
+            <text x="226" y="299" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#d97706">Nghị định</text>
+          </g>
+          <!-- Live indicator badge -->
+          <g opacity="0"><animate attributeName="opacity" values="0;1" dur="0.5s" begin="2.0s" fill="freeze"/>
+            <rect x="100" y="348" width="180" height="22" rx="11" fill="#059669" fill-opacity="0.12" stroke="#059669" stroke-width="1.2"/>
+            <circle cx="116" cy="359" r="4" fill="#059669"><animate attributeName="opacity" values="1;0.3;1" dur="1.5s" begin="2s" repeatCount="indefinite"/></circle>
+            <text x="200" y="364" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="500" fill="#059669">Cập nhật tự động · 24/7</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ A2A FLOW ══════════════ -->
+<section class="section section-white" id="integration">
+  <div class="container">
+    <div class="s-hdr center" data-a>
+      <span class="s-tag" data-i18n="flow-tag">Điều phối Agent A2A</span>
+      <h2 class="s-h2" data-i18n="flow-h2">Từ đóng deal đến nộp thuế — <span class="accent">hoàn toàn tự động</span></h2>
+      <p class="s-sub" data-i18n="flow-sub">Giao thức A2A (Agent-to-Agent) của AgentClan kết nối các agent AI thành quy trình liền mạch. Không copy-paste. Không nhập lại. Không sai sót.</p>
+    </div>
+    <!-- A2A Flow SVG -->
+    <div class="flow-svg-wrap" data-a>
+      <svg viewBox="0 0 900 260" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="fbg" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#f8faff"/><stop offset="100%" stop-color="#eef3ff"/></linearGradient>
+          <filter id="fglow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+          <marker id="arr" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#2563eb" opacity="0.6"/></marker>
+          <marker id="arr2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#059669" opacity="0.6"/></marker>
+        </defs>
+        <rect width="900" height="260" fill="url(#fbg)"/>
+
+        <!-- Connection lines -->
+        <line x1="232" y1="130" x2="348" y2="130" stroke="#2563eb" stroke-width="2" stroke-dasharray="8 4" opacity="0.5" marker-end="url(#arr)"><animate attributeName="stroke-dashoffset" values="24;0" dur="1s" repeatCount="indefinite"/></line>
+        <line x1="552" y1="130" x2="668" y2="130" stroke="#059669" stroke-width="2" stroke-dasharray="8 4" opacity="0.5" marker-end="url(#arr2)"><animate attributeName="stroke-dashoffset" values="24;0" dur="1s" begin="0.5s" repeatCount="indefinite"/></line>
+
+        <!-- Data packet animations -->
+        <circle r="6" fill="#3b82f6" filter="url(#fglow)"><animateMotion dur="1.5s" begin="0.2s" repeatCount="indefinite" path="M232,130 L348,130"/><animate attributeName="opacity" values="0;1;1;0" dur="1.5s" begin="0.2s" repeatCount="indefinite"/></circle>
+        <circle r="6" fill="#059669" filter="url(#fglow)"><animateMotion dur="1.5s" begin="1.0s" repeatCount="indefinite" path="M552,130 L668,130"/><animate attributeName="opacity" values="0;1;1;0" dur="1.5s" begin="1.0s" repeatCount="indefinite"/></circle>
+
+        <!-- A2A handoff labels -->
+        <rect x="270" y="108" width="70" height="20" rx="10" fill="white" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="305" y="122" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#2563eb">A2A handoff</text>
+        <rect x="580" y="108" width="70" height="20" rx="10" fill="white" stroke="#bbf7d0" stroke-width="1"/>
+        <text x="615" y="122" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#059669">A2A handoff</text>
+
+        <!-- NODE 1: Sales Agent -->
+        <rect x="30" y="50" width="202" height="160" rx="14" fill="white" stroke="#bfdbfe" stroke-width="1.5"/>
+        <rect x="30" y="50" width="202" height="42" rx="14" fill="#eff6ff"/>
+        <rect x="30" y="80" width="202" height="12" fill="#eff6ff"/>
+        <text x="52" y="77" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="0.08em" fill="#2563eb">SALES AGENT</text>
+        <text x="131" y="116" text-anchor="middle" font-size="28">🎯</text>
+        <text x="131" y="152" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="13" font-weight="500" fill="#0f1829">Sales Agent</text>
+        <text x="131" y="170" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" fill="#64748b">Lead &amp; chốt deal</text>
+        <rect x="50" y="182" width="162" height="20" rx="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="131" y="196" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#2563eb">"Lead nóng đã đóng — HĐ phát hành"</text>
+
+        <!-- NODE 2: AI Accountant (highlighted) -->
+        <rect x="348" y="40" width="204" height="180" rx="14" fill="white" stroke="#2563eb" stroke-width="2"/>
+        <rect x="348" y="40" width="204" height="46" rx="14" fill="#eff6ff"/>
+        <rect x="348" y="74" width="204" height="12" fill="#eff6ff"/>
+        <text x="372" y="69" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="0.08em" fill="#2563eb">KẾ TOÁN AI ✦</text>
+        <text x="450" y="114" text-anchor="middle" font-size="28">📑</text>
+        <text x="450" y="152" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="13" font-weight="500" fill="#0f1829">Kế Toán AI</text>
+        <text x="450" y="170" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" fill="#64748b">Ghi nhận &amp; phân loại</text>
+        <rect x="368" y="184" width="164" height="20" rx="10" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1"/>
+        <text x="450" y="198" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#2563eb">"Hóa đơn đã ghi vào sổ cái"</text>
+        <!-- Highlight pulse border -->
+        <rect x="348" y="40" width="204" height="180" rx="14" fill="none" stroke="#2563eb" stroke-width="2"><animate attributeName="stroke-opacity" values="1;0.3;1" dur="2.5s" repeatCount="indefinite"/></rect>
+
+        <!-- NODE 3: Tax Compliance -->
+        <rect x="668" y="50" width="202" height="160" rx="14" fill="white" stroke="#bbf7d0" stroke-width="1.5"/>
+        <rect x="668" y="50" width="202" height="42" rx="14" fill="#f0fdf4"/>
+        <rect x="668" y="80" width="202" height="12" fill="#f0fdf4"/>
+        <text x="688" y="77" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="700" letter-spacing="0.08em" fill="#059669">TUÂN THỦ THUẾ</text>
+        <text x="769" y="116" text-anchor="middle" font-size="28">🛡️</text>
+        <text x="769" y="152" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="13" font-weight="500" fill="#0f1829">Tuân Thủ Thuế</text>
+        <text x="769" y="170" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" fill="#64748b">Xác thực &amp; nộp điện tử</text>
+        <rect x="686" y="182" width="164" height="20" rx="10" fill="#f0fdf4" stroke="#bbf7d0" stroke-width="1"/>
+        <text x="768" y="196" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="9" fill="#059669">"Đã nộp và audit trail đã tạo"</text>
+      </svg>
+    </div>
+    <p class="flow-note" data-i18n="flow-note">Mọi chuyển giao đều dựa trên message qua giao thức A2A — mỗi bước được ghi log (nhật ký), kiểm toán được và có thể hoàn tác.</p>
+  </div>
+</section>
+
+<!-- ══════════════ PROOF ══════════════ -->
+<section class="section section-cool" id="proof">
+  <div class="container">
+    <div class="s-hdr center" data-a>
+      <span class="s-tag" data-i18n="proof-tag">Bằng con số</span>
+      <h2 class="s-h2" data-i18n="proof-h2">Kế Toán Viên AI <span class="accent">mang lại điều gì</span></h2>
+      <p class="s-sub" data-i18n="proof-sub">Các chỉ số thực từ knowledge base (cơ sở tri thức) và compliance engine (bộ kiểm tra tuân thủ) của chúng tôi.</p>
+    </div>
+    <div class="proof-grid" data-a>
+      <div class="pcard">
+        <span class="pcard-icon">💰</span>
+        <span class="pcard-num">70%</span>
+        <div class="pcard-label" data-i18n="p1-label">Tiết kiệm so với thuê kế toán</div>
+        <p class="pcard-sub" data-i18n="p1-sub">Chi phí cố định hàng tháng, không phụ thuộc khối lượng công việc. Không bảo hiểm, không thưởng Tết, không bàn giao khi nghỉ việc.</p>
+      </div>
+      <div class="pcard">
+        <span class="pcard-icon">🌙</span>
+        <span class="pcard-num">24/7</span>
+        <div class="pcard-label" data-i18n="p2-label">Làm việc liên tục, không nghỉ</div>
+        <p class="pcard-sub" data-i18n="p2-sub">24 giờ mỗi ngày, 7 ngày mỗi tuần, 365 ngày mỗi năm. Hóa đơn đến lúc nào, AI xử lý ngay lúc đó — kể cả mùng một Tết.</p>
+      </div>
+      <div class="pcard">
+        <span class="pcard-icon">⚡</span>
+        <span class="pcard-num">&lt;30s</span>
+        <div class="pcard-label" data-i18n="p3-label">Từ hóa đơn đến báo cáo</div>
+        <p class="pcard-sub" data-i18n="p3-sub">Chụp hóa đơn xong là có ngay trong sổ sách. Cuối tháng không còn cảnh đóng sổ mất cả tuần — mọi thứ đã sẵn sàng.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════ CTA ══════════════ -->
+<section class="cta-section" id="cta">
+  <div class="container">
+    <h2 class="cta-h2" data-a data-i18n="cta-h2">Bắt đầu tự động hóa<br><span class="accent">kế toán của bạn ngay hôm nay</span></h2>
+    <p class="cta-sub" data-a data-d="1" data-i18n="cta-sub">Tham gia danh sách chờ dùng thử. Không cần thẻ tín dụng, không phí thiết lập — chỉ cần kế toán nhanh hơn, sạch hơn, luôn tuân thủ.</p>
+    <div class="cta-actions" data-a data-d="2">
+      <a href="https://agentclan.co/login/accounting" class="btn btn-primary btn-lg" data-i18n="cta-p">Bắt Đầu Miễn Phí</a>
+      <a href="#" class="btn btn-dark-outline btn-lg" data-i18n="cta-s">Nói chuyện với đội ngũ chúng tôi</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-logo"><div class="footer-logo-mark">n</div>AgentClan · Kế Toán AI</div>
+      <ul class="footer-links">
+        <li><a href="/blog">Blog</a></li>
+        <li><a href="#features"    data-i18n="fl-feat">Tính năng</a></li>
+        <li><a href="#compliance"  data-i18n="fl-comp">Tuân thủ</a></li>
+        <li><a href="#integration" data-i18n="fl-integ">Tích hợp</a></li>
+        <li><a href="#"     data-i18n="fl-priv">Chính Sách Bảo Mật</a></li>
+        <li><a href="#" data-i18n="fl-contact">Liên Hệ</a></li>
+      </ul>
+      <p class="footer-copy" data-i18n="fl-copy">© 2026 AgentClan Co., Ltd. Mọi quyền được bảo lưu.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+
+  // Detect file:// and show banner
+  (function(){
+    if(location.protocol==='file:'){
+      var b=document.getElementById('fileban');
+      if(b){ b.classList.add('show'); document.body.classList.add('has-fileban'); }
+    }
+  })();
+var I18N={
+vi:{"nav-sub":"Kế Toán AI","nav-feat":"Tính năng","nav-comp":"Tuân thủ","nav-integ":"Tích hợp","nav-proof":"Bằng chứng","nav-cta":"Dùng thử miễn phí","lang-cur":"🇻🇳 Việt","hero-badge":"Dành cho chủ doanh nghiệp tự làm sổ sách","hero-h1a":"Kế Toán Viên AI","hero-h1b":"Không Nghỉ. Không Quên. Không Sai.","hero-sub":"Chủ doanh nghiệp không cần biết kế toán, cũng không cần thuê người full-time. Kế Toán Viên AI tự xử lý từ hóa đơn đầu vào đến tờ khai thuế — online 24/7, chỉ bằng một phần chi phí của kế toán in-house.","hero-cta1":"Dùng thử miễn phí","hero-cta2":"Xem demo trực tiếp","trust-1":"Không cần thẻ tín dụng","trust-3":"Dữ liệu lưu trú tại Việt Nam","cmp-tag":"Trước và sau","cmp-h2":"Chủ doanh nghiệp không nên tự tay nhập hóa đơn lúc 11 giờ đêm.","cmp-sub":"Đây là sự khác biệt giữa tự xoay sở và để AI lo trọn gói.","cmp-lead":"Bạn đang ở bên nào?","w-title":"Tự xoay sở","w1":"Cuối tháng mới nhớ ra cả xấp hóa đơn chưa ghi sổ","w2":"Không biết khoản chi này có được khấu trừ VAT không","w3":"Đến hạn nộp tờ khai mới cuống cuồng tìm chứng từ","w4":"Khách nợ bao lâu rồi? — phải mở file Excel ra dò","w5":"Thuê kế toán ngoài: <strong>5–10 triệu/tháng</strong>, vẫn phải chờ báo cáo","s-title":"Có Kế Toán Viên AI","s1":"Chụp hóa đơn xong là vào sổ — không bao giờ bỏ sót","s2":"Hỏi bất cứ lúc nào, trả lời ngay kèm căn cứ pháp lý","s3":"Tờ khai thuế <strong>luôn sẵn sàng trước hạn</strong>","s4":"Công nợ phải thu, phải trả cập nhật theo thời gian thực","s5":"Chi phí cố định, rẻ hơn thuê người — và không bao giờ nghỉ việc","feat-tag":"Những việc AI làm thay bạn","feat-h2":"Mọi việc của một phòng kế toán, <span class=\"accent\">gói gọn trong một AI</span>","feat-sub":"Bạn tập trung xây sản phẩm và bán hàng. Phần sổ sách, thuế, công nợ — để AI lo.","f1-title":"Không bỏ sót hóa đơn nào","f1-body":"Chụp ảnh, forward email, hay kéo file PDF vào — AI tự đọc, tự phân loại, tự ghi vào sổ sách. Hóa đơn điện tử đầu vào được đồng bộ tự động từ cơ quan thuế, không cần bạn đi lấy.","f2-title":"Luôn đúng luật, tự cập nhật","f2-body":"Luật thuế Việt Nam thay đổi liên tục. AI đọc và cập nhật hộ bạn trong vòng 24 giờ. Bạn không cần biết Thông tư nào đang có hiệu lực — mỗi giao dịch đều được kiểm tra trước khi vào sổ.","f3-title":"Biết chính xác ai nợ gì","f3-body":"Công nợ phải thu, phải trả, tuổi nợ — cập nhật thời gian thực. AI tự gửi email nhắc khách đến hạn, tự đối chiếu với sao kê ngân hàng. Bạn chỉ cần mở dashboard là biết tiền đang ở đâu.","f4-title":"Báo cáo sẵn sàng khi nhà đầu tư hỏi","f4-body":"Báo cáo kết quả kinh doanh, bảng cân đối, dòng tiền — có ngay trong vài giây, đúng chuẩn Việt Nam. Khi nhà đầu tư, ngân hàng, hay cơ quan thuế cần, bạn gửi luôn trong ngày.","comp-tag":"Nền tảng pháp lý","comp-h2":"Biết luật Việt Nam. <span class=\"accent\">Cập nhật trong 24 giờ.</span>","comp-intro":"Bạn không cần đọc luật nữa — AI đã đọc hộ bạn. Mỗi lần Bộ Tài chính ban hành thông tư, nghị định mới, hệ thống tự cập nhật trong vòng một ngày. Mọi giao dịch được kiểm tra theo quy định đang có hiệu lực trước khi ghi sổ.","t-law":"Luật","t-circ":"Thông tư","t-decree":"Nghị định","comp-note":"Quy định được giám sát liên tục và cập nhật trong 24h sau khi ban hành","flow-tag":"Tự động từ đầu đến cuối","flow-h2":"Từ hóa đơn đầu vào đến tờ khai thuế nộp xong — <span class=\"accent\">không cần ai nhập tay</span>","flow-sub":"Bạn không phải copy-paste giữa các hệ thống. Hóa đơn, ngân hàng, phần mềm bán hàng, cơ quan thuế — AI tự kết nối và chạy liền mạch qua mọi bước.","flow-note":"Mọi bước đều có nhật ký đầy đủ — khi cần kiểm toán hay giải trình, bạn có ngay chứng từ gốc.","proof-tag":"Vì sao chủ doanh nghiệp chọn AgentClan","proof-h2":"Rẻ hơn, nhanh hơn, <span class=\"accent\">không bao giờ nghỉ</span>","proof-sub":"Đây là những gì bạn nhận được — so với tự làm hoặc thuê kế toán ngoài.","p1-label":"Tiết kiệm so với thuê kế toán","p1-sub":"Chi phí cố định hàng tháng, không phụ thuộc khối lượng công việc. Không bảo hiểm, không thưởng Tết, không bàn giao khi nghỉ việc.","p2-label":"Làm việc liên tục, không nghỉ","p2-sub":"24 giờ mỗi ngày, 7 ngày mỗi tuần, 365 ngày mỗi năm. Hóa đơn đến lúc nào, AI xử lý ngay lúc đó — kể cả mùng một Tết.","p3-label":"Từ hóa đơn đến báo cáo","p3-sub":"Chụp hóa đơn xong là có ngay trong sổ sách. Cuối tháng không còn cảnh đóng sổ mất cả tuần — mọi thứ đã sẵn sàng.","cta-h2":"Để AI lo sổ sách. <span class=\"accent\">Bạn lo xây công ty.</span>","cta-sub":"Dùng thử miễn phí 30 ngày. Không cần thẻ tín dụng, không ràng buộc. Nếu không hợp, bạn rời đi bất cứ lúc nào — dữ liệu của bạn luôn thuộc về bạn.","cta-p":"Dùng Thử Miễn Phí","cta-s":"Nói chuyện với đội ngũ","fl-feat":"Tính năng","fl-comp":"Tuân thủ","fl-integ":"Tích hợp","fl-priv":"Chính Sách Bảo Mật","fl-contact":"Liên Hệ","fl-copy":"© 2026 AgentClan Co., Ltd. Mọi quyền được bảo lưu."},
+en:{"nav-sub":"AI Accounting","nav-feat":"Features","nav-comp":"Compliance","nav-integ":"Integrations","nav-proof":"Proof","nav-cta":"Start Free","lang-cur":"🇬🇧 EN","hero-badge":"Built for founders who run their own books","hero-h1a":"Your AI Accountant","hero-h1b":"Never Off. Never Late. Never Wrong.","hero-sub":"You don't need to learn accounting, and you don't need to hire a full-time bookkeeper. Your AI Accountant handles everything from incoming invoices to tax filings — online 24/7, at a fraction of the cost of an in-house hire.","hero-cta1":"Start Free","hero-cta2":"See live demo","trust-1":"No credit card required","trust-3":"Vietnamese data residency","cmp-tag":"Before and after","cmp-h2":"Founders shouldn't be entering invoices at 11pm.","cmp-sub":"Here's the difference between doing it yourself and letting AI handle the whole thing.","cmp-lead":"Which side are you on?","w-title":"Doing it yourself","w1":"Remembering a stack of unfiled receipts at month-end","w2":"Not knowing if this expense is VAT-deductible","w3":"Scrambling for documents the day the tax return is due","w4":"How long has this client been overdue? — dig through the spreadsheet","w5":"Outsourced bookkeeper: <strong>$200–400/month</strong>, and you still wait for reports","s-title":"With AI Accountant","s1":"Snap a receipt, it's in the books — nothing ever slips through","s2":"Ask anything, anytime — answers come with the legal citation","s3":"Your tax return is <strong>always ready before the deadline</strong>","s4":"Receivables and payables update in real time","s5":"Fixed cost, cheaper than hiring — and it never quits","feat-tag":"What AI does for you","feat-h2":"An entire accounting team, <span class=\"accent\">in one AI</span>","feat-sub":"You focus on building the product and closing sales. Books, taxes, receivables — let AI handle them.","f1-title":"Never miss an invoice","f1-body":"Snap a photo, forward an email, or drop in a PDF — AI reads it, classifies it, and files it in your books. Incoming e-invoices sync automatically from the tax authority. You don't have to chase anything.","f2-title":"Always compliant, always updated","f2-body":"Vietnamese tax law changes constantly. AI reads the updates and applies them within 24 hours. You don't need to know which circular is in force — every transaction is checked against current rules before it hits the books.","f3-title":"Know exactly who owes what","f3-body":"Receivables, payables, aging — all real-time. AI sends payment reminders, reconciles against your bank statements automatically. Open the dashboard and you see where the money is.","f4-title":"Reports ready when investors ask","f4-body":"Income statement, balance sheet, cash flow — generated in seconds, compliant with Vietnamese standards. When investors, banks, or the tax office asks, you send it the same day.","comp-tag":"Legal foundation","comp-h2":"It knows Vietnamese law. <span class=\"accent\">Updated within 24 hours.</span>","comp-intro":"You don't need to read the law anymore — AI has read it for you. Every time the Ministry of Finance issues a new circular or decree, the system updates within a day. Every transaction is checked against the current rules before it's recorded.","t-law":"Law","t-circ":"Circular","t-decree":"Decree","comp-note":"Regulations continuously monitored and updated within 24h of publication","flow-tag":"Automated end-to-end","flow-h2":"From incoming invoice to filed tax return — <span class=\"accent\">nobody types anything</span>","flow-sub":"You don't copy-paste between systems. Invoices, banks, sales software, the tax authority — AI connects them and runs the whole thing without breaks.","flow-note":"Every step is fully logged — when you need an audit or explanation, the source documents are right there.","proof-tag":"Why founders choose AgentClan","proof-h2":"Cheaper, faster, <span class=\"accent\">never off</span>","proof-sub":"Here's what you get — compared to doing it yourself or hiring it out.","p1-label":"Savings vs. hiring a bookkeeper","p1-sub":"Fixed monthly cost, no matter how many transactions. No benefits, no holiday bonus, no handover when someone quits.","p2-label":"Always working, never off","p2-sub":"24 hours a day, 7 days a week, 365 days a year. Whenever an invoice arrives, AI processes it right then — even on New Year's Day.","p3-label":"From invoice to report","p3-sub":"Snap a receipt and it's in your books instantly. No more week-long month-end close — everything is already done.","cta-h2":"Let AI handle the books. <span class=\"accent\">You build the company.</span>","cta-sub":"Free 30-day trial. No credit card, no commitment. If it's not a fit, leave anytime — your data always belongs to you.","cta-p":"Start Free","cta-s":"Talk to the team","fl-feat":"Features","fl-comp":"Compliance","fl-integ":"Integrations","fl-priv":"Privacy Policy","fl-contact":"Contact","fl-copy":"© 2026 AgentClan Co., Ltd. All rights reserved."}
+};
+function applyLang(lang){
+  document.documentElement.lang=lang==='vi'?'vi':'en';
+  localStorage.setItem('lang',lang);
+  document.querySelectorAll('[data-i18n]').forEach(function(el){
+    var k=el.getAttribute('data-i18n');
+    if(I18N[lang]&&I18N[lang][k]!==undefined)el.innerHTML=I18N[lang][k];
+  });
+  var cur=document.querySelector('#lsw [data-i18n="lang-cur"]');
+  var opt=document.querySelector('.lsw-opt');
+  if(lang==='vi'){if(cur)cur.textContent='🇻🇳 Việt';if(opt){opt.textContent='🇬🇧 English';opt.setAttribute('data-lang','en');}}
+  else{if(cur)cur.textContent='🇬🇧 EN';if(opt){opt.textContent='🇻🇳 Tiếng Việt';opt.setAttribute('data-lang','vi');}}
+}
+document.addEventListener('DOMContentLoaded',function(){
+  applyLang(localStorage.getItem('lang')||'vi');
+  var lsw=document.getElementById('lsw');
+  if(lsw){
+    lsw.addEventListener('click',function(e){e.stopPropagation();lsw.classList.toggle('open');});
+    var opt=lsw.querySelector('.lsw-opt');
+    if(opt)opt.addEventListener('click',function(e){e.stopPropagation();applyLang(opt.getAttribute('data-lang'));lsw.classList.remove('open');});
+    document.addEventListener('click',function(){lsw.classList.remove('open');});
+  }
+  var nav=document.getElementById('navbar');
+  window.addEventListener('scroll',function(){
+    if(nav){
+      if(window.scrollY>10)nav.classList.add('scrolled');
+      else nav.classList.remove('scrolled');
+    }
+  });
+  // Reveal-on-scroll for [data-a] elements
+  var reveals=document.querySelectorAll('[data-a]');
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){
+        if(en.isIntersecting){
+          en.target.classList.add('in');
+          io.unobserve(en.target);
+        }
+      });
+    },{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
+    reveals.forEach(function(el){io.observe(el);});
+  }else{
+    reveals.forEach(function(el){el.classList.add('in');});
+  }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "question": "Cách tính thuế TNCN từ tiền lương?",
+    "answer": "Thuế TNCN từ tiền lương được tính theo biểu thuế lũy tiến từng phần với 7 bậc thuế từ 5% đến 35%. Công thức: Thuế = (Thu nhập chịu thuế - Các khoản giảm trừ) × Thuế suất.",
+    "expected_keywords": ["biểu thuế lũy tiến", "5%", "35%", "giảm trừ"]
+  },
+  {
+    "id": 2,
+    "question": "Hóa đơn GTGT điện tử cần những thông tin gì?",
+    "answer": "Hóa đơn GTGT điện tử cần có: thông tin người bán/mua, mã số thuế, thông tin hàng hóa, thuế suất, chữ ký số.",
+    "expected_keywords": ["mã số thuế", "chữ ký số", "điện tử"]
+  },
+  {
+    "id": 3,
+    "question": "Thuế suất thuế TNDN hiện nay là bao nhiêu?",
+    "answer": "Thuế suất thuế TNDN thông thường là 20%, ưu đãi 17% cho DN công nghệ cao.",
+    "expected_keywords": ["20%", "17%", "ưu đãi"]
+  },
+  {
+    "id": 4,
+    "question": "Cách xác định hóa đơn hợp lệ?",
+    "answer": "Hóa đơn hợp lệ cần có: tên địa chỉ đầy đủ, mã số thuế còn hiệu lực, số hóa đơn tuân thủ thứ tự, ngày tháng hợp lệ, chữ ký và con dấu đúng quy định.",
+    "expected_keywords": ["mã số thuế", "chữ ký", "con dấu"]
+  },
+  {
+    "id": 5,
+    "question": "Các khoản giảm trừ thuế TNCN năm 2024?",
+    "answer": "Các khoản giảm trừ: bản thân 11 triệu/tháng, người phụ thuộc 4.4 triệu/tháng, quỹ hưu trí tự nguyện tối đa 12 triệu/năm.",
+    "expected_keywords": ["11 triệu", "4.4 triệu", "phụ thuộc"]
+  },
+  {
+    "id": 6,
+    "question": "Quy định về hóa đơn từ ngày 01/07/2020?",
+    "answer": "Từ 01/07/2020, DN có doanh thu trên 10 tỷ bắt buộc sử dụng hóa đơn điện tử.",
+    "expected_keywords": ["01/07/2020", "10 tỷ", "bắt buộc"]
+  },
+  {
+    "id": 7,
+    "question": "Thuế GTGT có mấy mức thuế suất?",
+    "answer": "Thuế GTGT có 3 mức thuế suất: 0%, 5%, 10%. Mức 0% áp dụng cho hàng hóa xuất khẩu, 5% cho hàng hóa thiết yếu, 10% là mức phổ biến.",
+    "expected_keywords": ["0%", "5%", "10%"]
+  },
+  {
+    "id": 8,
+    "question": "Khi nào được khấu trừ thuế GTGT?",
+    "answer": "Được khấu trừ thuế GTGT khi có hóa đơn hợp lệ, chứng từ thanh toán qua ngân hàng (>= 20 triệu), và hàng hóa/dịch vụ được sử dụng cho hoạt động sản xuất kinh doanh chịu thuế.",
+    "expected_keywords": ["hóa đơn hợp lệ", "20 triệu", "khấu trừ"]
+  },
+  {
+    "id": 9,
+    "question": "Thời hạn nộp tờ khai thuế GTGT?",
+    "answer": "Thời hạn nộp tờ khai thuế GTGT: hàng tháng chậm nhất ngày 20 tháng sau, quý chậm nhất ngày 30 quý sau.",
+    "expected_keywords": ["20", "30", "hàng tháng", "quý"]
+  },
+  {
+    "id": 10,
+    "question": "Chi phí được trừ khi tính thuế TNDN?",
+    "answer": "Chi phí được trừ khi: có hóa đơn/chứng từ hợp lệ, thanh toán qua ngân hàng (>= 20 triệu), chi phí có liên quan đến hoạt động kinh doanh, và không thuộc các khoản chi không được trừ.",
+    "expected_keywords": ["20 triệu", "hóa đơn", "không được trừ"]
+  },
+  {
+    "id": 11,
+    "question": "Mức phạt chậm nộp thuế?",
+    "answer": "Mức phạt chậm nộp thuế: 0.03%/ngày tính trên số thuế chậm nộp, tối đa không quá 10% số thuế chậm nộp.",
+    "expected_keywords": ["0.03%", "ngày", "10%"]
+  },
+  {
+    "id": 12,
+    "question": "Hồ sơ thuế cần lưu trữ bao lâu?",
+    "answer": "Hồ sơ thuế cần lưu trữ tối thiểu 10 năm kể từ ngày hết thời hạn nộp tờ khai hoặc từ ngày phát sinh nghiệp vụ.",
+    "expected_keywords": ["10 năm", "lưu trữ"]
+  },
+  {
+    "id": 13,
+    "question": "Cách tính thuế TNCN cho hợp đồng thử việc?",
+    "answer": "Thuế TNCN cho thử việc được tính theo biểu thuế lũy tiến nhưng không được giảm trừ gia cảnh trong thời gian thử việc.",
+    "expected_keywords": ["lũy tiến", "thử việc", "không giảm trừ"]
+  },
+  {
+    "id": 14,
+    "question": "Thuế TNCN có phải khấu trừ không?",
+    "answer": "Tổ chức, cá nhân trả thu nhập có trách nhiệm khấu trừ thuế TNCN trước khi trả cho người lao động.",
+    "expected_keywords": ["khấu trừ", "trả thu nhập"]
+  },
+  {
+    "id": 15,
+    "question": "Điều kiện để được hoàn thuế GTGT?",
+    "answer": "Được hoàn thuế GTGT khi: có thuế GTGT đầu vào lớn hơn đầu ra trong 12 tháng liên tục, hoặc DN tạm ngừng hoạt động, hoặc theo quy định đặc biệt.",
+    "expected_keywords": ["hoàn thuế", "12 tháng", "đầu vào"]
+  },
+  {
+    "id": 16,
+    "question": "Hóa đơn điện tử có giá trị pháp lý không?",
+    "answer": "Hóa đơn điện tử có giá trị pháp lý khi: có chữ ký số hợp lệ của người bán, đáp ứng các yêu cầu kỹ thuật theo quy định, và được truyền qua hệ thống cơ quan thuế.",
+    "expected_keywords": ["chữ ký số", "pháp lý", "cơ quan thuế"]
+  },
+  {
+    "id": 17,
+    "question": "Phân biệt hóa đơn và chứng từ?",
+    "answer": "Hóa đơn là chứng từ gốc của hoạt động bán hàng hóa, cung cấp dịch vụ. Chứng từ là bằng chứng cho các nghiệp vụ kinh tế khác như chi phí, thanh toán.",
+    "expected_keywords": ["bán hàng", "chứng từ", "dịch vụ"]
+  },
+  {
+    "id": 18,
+    "question": "Cách xử lý hóa đơn lẻ?",
+    "answer": "Hóa đơn lẻ phải đăng ký trước khi sử dụng, trong vòng 10 ngày kể từ ngày lập phải gửi cơ quan thuế. Không có giá trị khấu trừ nếu không đăng ký.",
+    "expected_keywords": ["10 ngày", "đăng ký", "khấu trừ"]
+  },
+  {
+    "id": 19,
+    "question": "Thu nhập nào không chịu thuế TNCN?",
+    "answer": "Thu nhập không chịu thuế: tiền ăn trưa ca dưới 730k/tháng, tiền điện thoại dưới 500k/tháng, bảo hiểm nhân thọ, chi phí công tác theo quy định.",
+    "expected_keywords": ["730k", "500k", "bảo hiểm"]
+  },
+  {
+    "id": 20,
+    "question": "Khai thuế điện tử như thế nào?",
+    "answer": "Khai thuế điện tử qua: đăng ký tài khoản thuế điện tử trên quan ly thue, nộp tờ khai qua mạng, ký số và gửi điện tử.",
+    "expected_keywords": ["điện tử", "ký số", "quan ly thue"]
+  }
+]

@@ -1,0 +1,18 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --accent-gold: #D4AF37;
+}
+
+.hero-gradient {
+  background: linear-gradient(135deg, #0284c7 0%, #0369a1 50%, #075985 100%);
+}
+
+.text-gradient {
+  background: linear-gradient(135deg, var(--accent-gold), #FF8C00);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
