@@ -45,4 +45,4 @@ The `agent/ketoanthue/pipeline.yaml` registers the ketoanthue agent on AgentClan
 | `agent/ketoanthue/prompts/system.txt` | Vietnamese accounting system prompt |
 | `agent/ketoanthue/eval/golden_set.json` | 20 Q&A test cases |
 | `web/src/lib/agentclan.ts` | AgentClan API client |
-| `docker-compose.yml` | Production with AgentClan network join |
+| `docker-compose.yml` | Production with AgentClan network join |# Code Review Trigger
