@@ -1,0 +1,77 @@
+# Ketoanthue Production Docker Compose
+# Joins AgentClan external network and uses shared Qdrant/PostgreSQL services
+
+services:
+  # ── Ketoanthue Web (Next.js Chat Interface) ────────────────────
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+    environment:
+      NEXT_PUBLIC_AGENTCLAN_API: ${NEXT_PUBLIC_AGENTCLAN_API}
+      NEXT_PUBLIC_AGENTCLAN_TOKEN: ${NEXT_PUBLIC_AGENTCLAN_TOKEN}
+      NEXT_PUBLIC_APP_URL: https://ketoanthue.ai.vn
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    networks:
+      - ketoanthue
+      - agentclan
+
+  # ── Ketoanthue Backend API ─────────────────────────────────────
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: postgresql://ketoanthue:ketoanthue@postgres:5432/ketoanthue
+      REDIS_HOST: redis
+      REDIS_PORT: "6379"
+      PORT: "3001"
+      AGENTCLAN_API_KEY: ${AGENTCLAN_API_KEY}
+      AGENTCLAN_API_URL: http://web:8080
+    ports:
+      - "3003:3001"
+    restart: unless-stopped
+    networks:
+      - ketoanthue
+      - agentclan
+
+  # ── Infrastructure (shared with AgentClan via external) ─────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-ketoanthue}
+      POSTGRES_USER: ${POSTGRES_USER:-ketoanthue}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ketoanthue}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+    networks:
+      - ketoanthue
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ketoanthue -d ketoanthue"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis/redis-stack:latest
+    restart: unless-stopped
+    networks:
+      - ketoanthue
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  pgdata:
+
+networks:
+  ketoanthue:
+    name: ketoanthue
+  agentclan:
+    external: true
+    name: agentclan_agentclan

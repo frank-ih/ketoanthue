@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#faf8f5"/>
+      <stop offset="100%" stop-color="#f4efe6"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bg)"/>
+
+  <!-- Top bar -->
+  <rect width="1200" height="8" fill="#e05c20"/>
+
+  <!-- Category badge -->
+  <rect x="80" y="170" rx="16" ry="16" width="236" height="36" fill="#e05c20" opacity="0.12"/>
+  <rect x="80" y="170" rx="16" ry="16" width="236" height="36" fill="none" stroke="#e05c20" stroke-width="1.5"/>
+  <text x="96" y="194" font-family="Be Vietnam Pro, Arial, sans-serif" font-size="14" font-weight="600" fill="#e05c20">Thuế Doanh Nghiệp</text>
+
+  <!-- Title -->
+  <text x="80" y="260" font-family="Be Vietnam Pro, Arial, sans-serif" font-size="42" font-weight="700" fill="#19110a">Thuế môn bài 2026: Mức thu</text>
+<text x="80" y="312" font-family="Be Vietnam Pro, Arial, sans-serif" font-size="42" font-weight="700" fill="#19110a">và cách nộp</text>
+
+
+  <!-- Bottom bar -->
+  <rect x="80" y="530" width="40" height="40" rx="8" fill="#e05c20"/>
+  <text x="94" y="558" font-family="Arial" font-size="20" fill="#ffffff">&#9889;</text>
+  <text x="132" y="558" font-family="Be Vietnam Pro, Arial, sans-serif" font-size="18" font-weight="600" fill="#19110a">Kế Toán Thuế AI</text>
+  <text x="132" y="578" font-family="Be Vietnam Pro, Arial, sans-serif" font-size="13" fill="rgba(25,17,10,0.52)">ketoanthue.ai.vn</text>
+
+  <!-- Decorative elements -->
+  <circle cx="1050" cy="100" r="180" fill="#e05c20" opacity="0.04"/>
+  <circle cx="1100" cy="530" r="120" fill="#e05c20" opacity="0.03"/>
+</svg>

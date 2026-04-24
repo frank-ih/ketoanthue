@@ -1,0 +1,22 @@
+[
+  {
+    "question": "Cách tính thuế TNCN từ tiền lương?",
+    "answer": "Thuế TNCN từ tiền lương được tính theo biểu thuế lũy tiến từng phần:\n\n| Bậc | Thu nhập tính thuế (triệu đồng) | Thuế suất |\n|-----|--------------------------------|----------|\n| 1 | Đến 5 | 5% |\n| 2 | Trên 5 đến 10 | 10% |\n| 3 | Trên 10 đến 18 | 15% |\n| 4 | Trên 18 đến 32 | 20% |\n| 5 | Trên 32 đến 52 | 25% |\n| 6 | Trên 52 đến 80 | 30% |\n| 7 | Trên 80 | 35% |\n\nCông thức:Thuế TNCN = (Thu nhập tính thuế) × Thuế suất\nThu nhập tính thuế = Thu nhập chịu thuế - Các khoản giảm trừ\n\n**Nguồn**: Thông tư 111/2013/TT-BTC, Điều 10"
+  },
+  {
+    "question": "Hóa đơn GTGT điện tử cần những thông tin gì?",
+    "answer": "Hóa đơn GTGT điện tử phải có:\n\n1. **Thông tin người bán**: Tên, địa chỉ, mã số thuế\n2. **Thông tin người mua**: Tên, địa chỉ, mã số thuế\n3. **Thông tin hàng hóa**: Tên, số lượng, đơn giá, thành tiền\n4. **Thuế suất và tiền thuế**: Áp dụng 0%, 5%, 10%\n5. **Chữ ký số**: Điện tử của người bán\n6. **Mã của cơ quan thuế**: Theo quy định\n\n**Nguồn**: Nghị định 123/2020/NĐ-CP, Điều 31"
+  },
+  {
+    "question": "Thuế suất thuế TNDN hiện nay là bao nhiêu?",
+    "answer": "Thuế suất thuế TNDN hiện hành:\n\n- **Thuế suất thông thường**: 20%\n- **Thuế suất ưu đãi**: 17% (đối với DN có thu nhập từ ứng dụng công nghệ cao, nghiên cứu phát triển)\n\n**Lưu ý**: DN không được chuyển lỗ quá 5 năm liên tục (trừ một số ngành đặc biệt)\n\n**Nguồn**: Luật Thuế TNDN 2008 (sửa đổi 2013), Điều 11"
+  },
+  {
+    "question": "Cách xác định hóa đơn hợp lệ?",
+    "answer": "Hóa đơn hợp lệ cần đảm bảo:\n\n1. **Tên và địa chỉ**: Đầy đủ, chính xác của người bán và người mua\n2. **Mã số thuế**: Còn hiệu lực và trùng khớp\n3. **Số hóa đơn**: Tuân thủ thứ tự, không trùng lặp\n4. **Ngày tháng**: Hợp lệ, không tương lai\n5. **Chữ ký và con dấu**: Đúng theo quy định\n6. **Thông tin hàng hóa**: Rõ ràng, giá trị > 0\n\n**Lưu ý**: Từ 01/07/2020, hóa đơn điện tử bắt buộc cho DN có doanh thu > 10 tỷ\n\n**Nguồn**: Nghị định 123/2020/NĐ-CP"
+  },
+  {
+    "question": "Các khoản giảm trừ thuế TNCN năm 2024?",
+    "answer": "Các khoản giảm trừ thuế TNCN:\n\n| Khoản giảm trừ | Mức giảm trừ |\n|--------------|---------------|\n| Bản thân | 11 triệu/tháng |\n| Người phụ thuộc | 4.4 triệu/tháng/người |\n| Quỹ hưu trí tự nguyện | Tối đa 12 triệu/năm |\n| Bảo hiểm nhân thọ | Tối đa 12 triệu/năm |\n| Quỹ khuyến học | Không giới hạn |\n\n**Nguồn**: Luật Thuế TNCN 2007 (sửa đổi 2012, 2014), Điều 9"
+  }
+]

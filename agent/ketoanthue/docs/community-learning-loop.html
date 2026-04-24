@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Community-Driven Learning Loop — Accounting Agent Sub-Workflow</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#06080c; --s1:#0e1118; --s2:#161b25; --s3:#1e2431; --bdr:#262d3e;
+  --tx:#e0e4ee; --dm:#6f7a92;
+  --gold:#eab308; --green:#22c55e; --blue:#3b82f6; --purple:#8b5cf6;
+  --red:#ef4444; --orange:#f97316; --teal:#14b8a6; --pink:#ec4899; --cyan:#06b6d4; --lime:#84cc16;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--tx);line-height:1.65;}
+
+/* Hero */
+.hero{text-align:center;padding:70px 36px 20px;position:relative;}
+.hero::before{content:'';position:absolute;top:0;left:0;right:0;height:450px;
+  background:radial-gradient(ellipse at 40% 0%,rgba(20,184,166,0.07) 0%,transparent 50%),
+  radial-gradient(ellipse at 70% 0%,rgba(236,72,153,0.06) 0%,transparent 50%);pointer-events:none;}
+.hero h1{font-family:'Fraunces',serif;font-size:2.6rem;font-weight:900;
+  background:linear-gradient(135deg,var(--teal),#fff,var(--pink));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:-1.5px;margin-bottom:8px;}
+.hero .sub{color:var(--dm);font-size:0.95rem;max-width:780px;margin:0 auto;}
+.hero .badge{display:inline-block;padding:5px 14px;border-radius:6px;font-size:0.72rem;font-weight:600;
+  background:rgba(20,184,166,0.12);color:var(--teal);margin-bottom:16px;letter-spacing:0.5px;}
+
+/* Sections */
+.sec{max-width:1380px;margin:0 auto;padding:48px 34px;}
+.sec-t{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:800;margin-bottom:6px;display:flex;align-items:center;gap:12px;}
+.sec-t .i{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;flex-shrink:0;}
+.sec-d{color:var(--dm);font-size:0.9rem;margin-bottom:28px;max-width:800px;}
+
+/* Cards */
+.c{background:var(--s1);border:1px solid var(--bdr);border-radius:13px;padding:24px;}
+.c h3{font-size:1rem;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.c p,.c li{font-size:0.86rem;color:var(--dm);line-height:1.7;} .c strong{color:var(--tx);}
+
+/* Grids */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+@media(max-width:768px){.g2,.g3{grid-template-columns:1fr;}}
+
+/* Mono */
+.mono{font-family:'JetBrains Mono',monospace;}
+ul.cl{list-style:none;} ul.cl li{padding:4px 0;} ul.cl li::before{content:'› ';color:var(--gold);font-weight:700;}
+
+/* ═══════════════════════════════════════════════════ */
+/* THE MAIN FLOW DIAGRAM                              */
+/* ═══════════════════════════════════════════════════ */
+.flow-mega{background:var(--s1);border:1px solid var(--bdr);border-radius:16px;padding:36px;margin:32px 0;overflow-x:auto;}
+.flow-mega h3{text-align:center;font-size:1.15rem;font-weight:700;margin-bottom:24px;}
+
+/* Vertical flow nodes */
+.vflow{display:flex;flex-direction:column;align-items:center;gap:0;max-width:900px;margin:0 auto;}
+
+.vnode{width:100%;background:var(--s2);border:1px solid var(--bdr);border-radius:12px;padding:22px 24px;
+  position:relative;transition:all 0.25s;}
+.vnode:hover{border-color:var(--teal);box-shadow:0 4px 20px rgba(20,184,166,0.08);}
+
+.vnode-head{display:flex;align-items:center;gap:12px;margin-bottom:10px;}
+.vnode-num{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:0.78rem;font-weight:700;flex-shrink:0;}
+.vnode-title{font-size:0.95rem;font-weight:600;}
+.vnode-agent{font-family:'JetBrains Mono';font-size:0.68rem;padding:3px 8px;border-radius:4px;margin-left:auto;}
+.vnode-body{font-size:0.84rem;color:var(--dm);line-height:1.65;}
+.vnode-body strong{color:var(--tx);}
+
+/* Branch indicators */
+.vbranch{display:flex;align-items:center;gap:0;width:100%;padding:4px 0;}
+.vbranch-line{flex:1;height:2px;background:var(--bdr);}
+.vbranch-label{padding:4px 14px;font-size:0.72rem;font-weight:600;border-radius:20px;white-space:nowrap;}
+
+.varrow{display:flex;flex-direction:column;align-items:center;padding:4px 0;color:var(--dm);}
+.varrow .arr{font-size:1.2rem;line-height:1;}
+.varrow .albl{font-size:0.68rem;font-family:'JetBrains Mono';color:var(--dm);}
+
+/* Decision diamond */
+.vdecision{width:100%;background:var(--s2);border:2px dashed var(--orange);border-radius:12px;
+  padding:18px 24px;text-align:center;}
+.vdecision .q{font-size:0.9rem;font-weight:600;color:var(--orange);margin-bottom:6px;}
+.vdecision .detail{font-size:0.78rem;color:var(--dm);}
+
+/* Side panels for branches */
+.branch-row{display:grid;grid-template-columns:1fr 60px 1fr;gap:0;align-items:start;width:100%;}
+.branch-left,.branch-right{background:var(--s2);border:1px solid var(--bdr);border-radius:10px;padding:16px;}
+.branch-center{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:10px 0;}
+.branch-center .or{font-size:0.72rem;font-weight:600;color:var(--dm);padding:6px 0;}
+.branch-left h5,.branch-right h5{font-size:0.82rem;font-weight:600;margin-bottom:6px;}
+.branch-left p,.branch-right p{font-size:0.78rem;color:var(--dm);line-height:1.5;}
+
+/* Confidence meter */
+.conf-meter{display:flex;align-items:center;gap:12px;margin:12px 0;}
+.conf-bar{flex:1;height:10px;background:var(--s3);border-radius:5px;overflow:hidden;position:relative;}
+.conf-fill{height:100%;border-radius:5px;transition:width 0.5s;}
+.conf-label{font-family:'JetBrains Mono';font-size:0.78rem;font-weight:600;white-space:nowrap;}
+
+/* Research cycle */
+.cycle-ring{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:12px 0;}
+.cycle-step{padding:6px 12px;background:var(--s3);border:1px solid var(--bdr);border-radius:8px;
+  font-size:0.75rem;display:flex;align-items:center;gap:6px;}
+.cycle-step .emoji{font-size:0.9rem;}
+.cycle-arr{color:var(--purple);font-size:0.9rem;}
+
+/* Knowledge unit card */
+.k-unit{background:linear-gradient(135deg,rgba(20,184,166,0.05),rgba(139,92,246,0.05));
+  border:1px solid rgba(20,184,166,0.25);border-radius:12px;padding:20px;margin:12px 0;}
+.k-unit h4{font-size:0.9rem;font-weight:600;margin-bottom:8px;color:var(--teal);}
+.k-unit .fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;}
+.k-field{background:var(--s2);border-radius:6px;padding:8px 12px;}
+.k-field .lbl{font-family:'JetBrains Mono';font-size:0.65rem;color:var(--dm);text-transform:uppercase;letter-spacing:0.5px;}
+.k-field .val{font-size:0.8rem;color:var(--tx);margin-top:2px;}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin:24px 0;}
+.stat{background:var(--s1);border:1px solid var(--bdr);border-radius:11px;padding:18px;text-align:center;}
+.stat .n{font-size:1.6rem;font-weight:700;}
+.stat .l{font-size:0.72rem;color:var(--dm);margin-top:2px;}
+@media(max-width:700px){.stats{grid-template-columns:repeat(2,1fr);} .branch-row{grid-template-columns:1fr;}}
+
+/* Tag */
+.tag{display:inline-block;padding:3px 9px;border-radius:5px;font-size:0.68rem;font-weight:600;}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <span class="badge">SUB-WORKFLOW — ADDITION TO LEARNING PLAN</span>
+  <h1>Community-Driven Learning Loop</h1>
+  <p class="sub">Social Scout Agent harvests real accounting questions from communities → Accounting Agent attempts to solve → knowledge gaps trigger deep research → confirmed answers auto-adopted into the knowledge base. The agent gets smarter every day from real-world problems it couldn't previously solve.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 1: WHY THIS MATTERS                    -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t"><div class="i" style="background:rgba(234,179,8,0.12);color:var(--gold);">💡</div>Why This Sub-Workflow Exists</div>
+  <p class="sec-d">The static ingestion pipeline (crawling laws and publications) gives the agent its foundation. But real-world accounting is messy — practitioners face edge cases, ambiguous situations, and novel transaction types that no textbook covers. Community questions are the richest signal for what the agent doesn't yet know.</p>
+
+  <div class="g3">
+    <div class="c" style="border-top:3px solid var(--teal);">
+      <h3>🎯 Gap Discovery</h3>
+      <p>Community questions reveal <strong>precisely where the agent's knowledge has holes</strong>. A question the agent can't answer at >95% confidence = a gap to fill. This is far more targeted than blanket crawling.</p>
+    </div>
+    <div class="c" style="border-top:3px solid var(--pink);">
+      <h3>🔄 Self-Healing Knowledge</h3>
+      <p>The agent doesn't just flag gaps — it <strong>actively researches, validates, and patches them</strong>. Each resolved question becomes a new knowledge unit that prevents future gaps on the same topic.</p>
+    </div>
+    <div class="c" style="border-top:3px solid var(--purple);">
+      <h3>📈 Demand-Driven Priority</h3>
+      <p>Questions that appear frequently across communities get <strong>higher research priority</strong>. The agent learns what practitioners actually struggle with, not what we assume they need.</p>
+    </div>
+  </div>
+
+  <!-- Agents involved -->
+  <div class="c" style="margin-top:20px;">
+    <h3 style="color:var(--gold);">🤖 Two Agents Working Together via A2A (NATS)</h3>
+    <div class="g2" style="margin-top:12px;">
+      <div style="padding:16px;background:var(--s2);border-radius:10px;border-left:3px solid var(--pink);">
+        <h5 style="font-size:0.9rem;font-weight:600;color:var(--pink);margin-bottom:6px;">Social Scout Agent</h5>
+        <p style="font-size:0.82rem;color:var(--dm);">Variant of the <strong>SocialAdvocate</strong> template. Monitors Facebook groups (Kế toán tổng hợp, Hỏi đáp kế toán thuế, etc.), Zalo groups, accounting forums. Identifies accounting-related questions, deduplicates, extracts structured question + context, and forwards to the Accounting Agent via A2A.</p>
+        <p style="font-size:0.75rem;color:var(--pink);margin-top:8px;font-family:'JetBrains Mono';">NATS subject: agent.accounting.community_question</p>
+      </div>
+      <div style="padding:16px;background:var(--s2);border-radius:10px;border-left:3px solid var(--teal);">
+        <h5 style="font-size:0.9rem;font-weight:600;color:var(--teal);margin-bottom:6px;">Accounting Agent</h5>
+        <p style="font-size:0.82rem;color:var(--dm);">Receives the question. Runs the full consultation pipeline: context assessment → clarification/scenario generation → solution attempt → confidence scoring → deep research loop (if needed) → knowledge adoption. The Accounting Agent is both the <strong>answerer</strong> and the <strong>learner</strong>.</p>
+        <p style="font-size:0.75rem;color:var(--teal);margin-top:8px;font-family:'JetBrains Mono';">NATS subject: agent.accounting.knowledge_adoption</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 2: THE FULL FLOW DIAGRAM               -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t"><div class="i" style="background:rgba(20,184,166,0.12);color:var(--teal);">🔄</div>The Complete Flow — 8 Stages</div>
+  <p class="sec-d">From a random Facebook post to a verified knowledge unit in the agent's knowledge base. Every branch, every decision gate, every safety check.</p>
+
+  <div class="flow-mega">
+    <h3 style="color:var(--teal);">Community Question → Knowledge Adoption Pipeline</h3>
+
+    <div class="vflow">
+
+      <!-- STAGE 1: Collect -->
+      <div class="vnode" style="border-left:3px solid var(--pink);">
+        <div class="vnode-head">
+          <div class="vnode-num" style="background:rgba(236,72,153,0.15);color:var(--pink);">1</div>
+          <span class="vnode-title">Collect & Filter</span>
+          <span class="vnode-agent" style="background:rgba(236,72,153,0.1);color:var(--pink);">Social Scout Agent</span>
+        </div>
+        <div class="vnode-body">
+          <strong>Monitor:</strong> Facebook groups (Kế toán tổng hợp, Hỏi đáp kế toán thuế, Cộng đồng kế toán Việt Nam, etc.), Zalo communities, ketoan.vn forums.<br>
+          <strong>Filter:</strong> Intent classifier detects accounting questions (vs. ads, memes, off-topic). Must mention money, tax, invoice, ledger, GL accounts, circulars, or ask "hạch toán thế nào" / "tính thuế ra sao".<br>
+          <strong>Deduplicate:</strong> Semantic similarity check against last 30 days of collected questions. Threshold >0.92 = skip (already processed).<br>
+          <strong>Extract:</strong> Structured payload: <span class="mono" style="font-size:0.75rem;">{question_text, asker_context, group_name, engagement_count, images[], timestamp}</span><br>
+          <strong>Prioritize:</strong> Higher engagement (likes, comments) = higher priority. Questions with 10+ comments are likely edge cases many people struggle with.
+        </div>
+      </div>
+
+      <div class="varrow">
+        <span class="albl">A2A via NATS</span>
+        <span class="arr">▼</span>
+      </div>
+
+      <!-- STAGE 2: Context Assessment -->
+      <div class="vnode" style="border-left:3px solid var(--teal);">
+        <div class="vnode-head">
+          <div class="vnode-num" style="background:rgba(20,184,166,0.15);color:var(--teal);">2</div>
+          <span class="vnode-title">Context Completeness Assessment</span>
+          <span class="vnode-agent" style="background:rgba(20,184,166,0.1);color:var(--teal);">Accounting Agent</span>
+        </div>
+        <div class="vnode-body">
+          The agent runs a <strong>Context Completeness Checker</strong> — a classifier that scores whether the question has enough information to answer accurately. It checks for 6 required dimensions:
+
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0;">
+            <div style="padding:8px 10px;background:var(--s3);border-radius:6px;font-size:0.75rem;">
+              <strong style="color:var(--green);">✓ Industry type</strong><br><span style="color:var(--dm);">Trading? Manufacturing? Service? Construction?</span>
+            </div>
+            <div style="padding:8px 10px;background:var(--s3);border-radius:6px;font-size:0.75rem;">
+              <strong style="color:var(--green);">✓ Company size regime</strong><br><span style="color:var(--dm);">TT99 (enterprise) or TT133 (SME)?</span>
+            </div>
+            <div style="padding:8px 10px;background:var(--s3);border-radius:6px;font-size:0.75rem;">
+              <strong style="color:var(--green);">✓ Transaction type</strong><br><span style="color:var(--dm);">Purchase? Sale? Payroll? FX? Tax?</span>
+            </div>
+            <div style="padding:8px 10px;background:var(--s3);border-radius:6px;font-size:0.75rem;">
+              <strong style="color:var(--green);">✓ Specific amounts</strong><br><span style="color:var(--dm);">Numbers, currency, VAT inclusion?</span>
+            </div>
+            <div style="padding:8px 10px;background:var(--s3);border-radius:6px;font-size:0.75rem;">
+              <strong style="color:var(--green);">✓ Parties involved</strong><br><span style="color:var(--dm);">Vendor? Customer? Employee? Tax authority?</span>
+            </div>
+            <div style="padding:8px 10px;background:var(--s3);border-radius:6px;font-size:0.75rem;">
+              <strong style="color:var(--green);">✓ Time context</strong><br><span style="color:var(--dm);">Which fiscal year? Which regulation era?</span>
+            </div>
+          </div>
+          <strong>Scoring:</strong> Each dimension: present (1.0), inferable (0.7), or missing (0.0). Completeness = weighted average. If ≥ 0.7 → proceed. If < 0.7 → needs clarification.
+        </div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span></div>
+
+      <!-- DECISION: Context sufficient? -->
+      <div class="vdecision">
+        <div class="q">⟁ Is context completeness ≥ 0.7 ?</div>
+        <div class="detail">Can the agent construct a meaningful answer with available info?</div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span></div>
+
+      <!-- BRANCH: YES vs NO -->
+      <div class="branch-row">
+        <div class="branch-left" style="border-top:3px solid var(--green);">
+          <h5 style="color:var(--green);">✅ YES — Sufficient Context</h5>
+          <p>Proceed directly to <strong>Stage 4: Solution Attempt</strong>. The agent has enough information to construct a meaningful answer.</p>
+        </div>
+        <div class="branch-center">
+          <span class="or">—</span>
+        </div>
+        <div class="branch-right" style="border-top:3px solid var(--orange);">
+          <h5 style="color:var(--orange);">⚠️ NO — Insufficient Context</h5>
+          <p>Agent generates <strong>clarification questions</strong> and sends back to Social Scout for posting as a reply. Set a <strong>48-hour timeout</strong>.</p>
+        </div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span><span class="albl">if NO context…</span></div>
+
+      <!-- STAGE 3: Clarify or Scenario-ize -->
+      <div class="vnode" style="border-left:3px solid var(--orange);">
+        <div class="vnode-head">
+          <div class="vnode-num" style="background:rgba(249,115,22,0.15);color:var(--orange);">3</div>
+          <span class="vnode-title">Clarify → Timeout → Scenario Construction</span>
+          <span class="vnode-agent" style="background:rgba(20,184,166,0.1);color:var(--teal);">Accounting Agent</span>
+        </div>
+        <div class="vnode-body">
+          <strong>Step 3a — Clarification Request:</strong> The agent drafts a natural, helpful reply asking for missing context. Example: <em>"Anh/chị đang hạch toán theo Thông tư nào (TT99 hay TT133)? Và đây là giao dịch mua hàng hóa hay dịch vụ ạ?"</em> — sent back via Social Scout → posted as a reply in the group.<br><br>
+
+          <strong>Step 3b — Wait for Response:</strong> Social Scout monitors for replies from the original poster. If the human clarifies → merge new context → re-run Stage 2 → proceed to Stage 4.<br><br>
+
+          <strong>Step 3c — Timeout (48h, no reply):</strong> The agent constructs a <strong>representative sample scenario</strong> that fills in missing context with the most common/likely values:
+
+          <div class="k-unit" style="margin-top:10px;">
+            <h4>📝 Auto-Generated Scenario Example</h4>
+            <p style="font-size:0.82rem;color:var(--dm);margin-bottom:10px;">
+              <strong>Original question:</strong> "Công ty mua máy tính trả bằng chuyển khoản, hạch toán thế nào?"<br>
+              <strong>Missing:</strong> company size, amount, VAT details, asset or expense classification
+            </p>
+            <div class="fields">
+              <div class="k-field"><div class="lbl">Assumption 1</div><div class="val">SME using Circular 133 (most common asker profile)</div></div>
+              <div class="k-field"><div class="lbl">Assumption 2</div><div class="val">Computer costs 15,000,000 VND (excl. VAT)</div></div>
+              <div class="k-field"><div class="lbl">Assumption 3</div><div class="val">VAT 10% = 1,500,000 VND. Total = 16,500,000 VND</div></div>
+              <div class="k-field"><div class="lbl">Assumption 4</div><div class="val">< 30M VND → expense (not fixed asset per TT45/2013)</div></div>
+              <div class="k-field"><div class="lbl">Scenario tag</div><div class="val">AUTO_GENERATED — assumptions marked explicitly</div></div>
+            </div>
+          </div>
+          <strong>Critical rule:</strong> ALL assumptions are explicitly labeled. The agent never presents assumed context as fact. If the scenario turns out to produce a different answer under different assumptions, the agent generates <strong>multiple scenario variants</strong>.
+        </div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span></div>
+
+      <!-- STAGE 4: Solution Attempt -->
+      <div class="vnode" style="border-left:3px solid var(--blue);">
+        <div class="vnode-head">
+          <div class="vnode-num" style="background:rgba(59,130,246,0.15);color:var(--blue);">4</div>
+          <span class="vnode-title">Solution Attempt + Confidence Scoring</span>
+          <span class="vnode-agent" style="background:rgba(20,184,166,0.1);color:var(--teal);">Accounting Agent</span>
+        </div>
+        <div class="vnode-body">
+          The agent attempts to answer using its <strong>existing knowledge base</strong> (vector store + knowledge graph + lookup tables). The answer goes through the full pipeline: classify → retrieve → reason → generate → verify.<br><br>
+
+          <strong>Confidence Score</strong> is computed from 5 weighted signals:
+
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0;">
+            <div style="padding:8px;background:var(--s3);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--blue);">Source Authority</strong><br>
+              <span style="color:var(--dm);">Weight: 30%</span><br>
+              <span style="color:var(--dm);">How many Tier 1-2 sources support this?</span>
+            </div>
+            <div style="padding:8px;background:var(--s3);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--blue);">Accounting Validity</strong><br>
+              <span style="color:var(--dm);">Weight: 25%</span><br>
+              <span style="color:var(--dm);">Dr=Cr? GL codes valid? Tax math correct?</span>
+            </div>
+            <div style="padding:8px;background:var(--s3);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--blue);">Retrieval Relevance</strong><br>
+              <span style="color:var(--dm);">Weight: 20%</span><br>
+              <span style="color:var(--dm);">Cross-encoder score of retrieved docs vs query</span>
+            </div>
+            <div style="padding:8px;background:var(--s3);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--blue);">Pattern Match</strong><br>
+              <span style="color:var(--dm);">Weight: 15%</span><br>
+              <span style="color:var(--dm);">Similar scenario solved before? From graph templates?</span>
+            </div>
+            <div style="padding:8px;background:var(--s3);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--blue);">LLM Self-Assess</strong><br>
+              <span style="color:var(--dm);">Weight: 10%</span><br>
+              <span style="color:var(--dm);">Model's own uncertainty calibration</span>
+            </div>
+          </div>
+
+          <div class="conf-meter">
+            <span class="conf-label">Confidence:</span>
+            <div class="conf-bar">
+              <div class="conf-fill" style="width:72%;background:linear-gradient(90deg,var(--red),var(--orange));"></div>
+            </div>
+            <span class="conf-label" style="color:var(--orange);">72%</span>
+            <span class="tag" style="background:rgba(249,115,22,0.15);color:var(--orange);">BELOW THRESHOLD</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span></div>
+
+      <!-- DECISION: Confidence >= 95%? -->
+      <div class="vdecision" style="border-color:var(--red);">
+        <div class="q" style="color:var(--red);">⟁ Is confidence ≥ 95% ?</div>
+        <div class="detail">The threshold is deliberately high because accounting errors have real financial consequences.</div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span></div>
+
+      <div class="branch-row">
+        <div class="branch-left" style="border-top:3px solid var(--green);">
+          <h5 style="color:var(--green);">✅ ≥ 95% — Confident Answer</h5>
+          <p>Skip to <strong>Stage 7: Package & Adopt</strong>. The existing knowledge base was sufficient.</p>
+        </div>
+        <div class="branch-center"><span class="or">—</span></div>
+        <div class="branch-right" style="border-top:3px solid var(--red);">
+          <h5 style="color:var(--red);">❌ < 95% — Knowledge Gap Detected</h5>
+          <p>Enter <strong>Stage 5: Deep Research Loop</strong>. The agent knows it doesn't know enough — and goes hunting.</p>
+        </div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span><span class="albl">if < 95%…</span></div>
+
+      <!-- STAGE 5: Deep Research Loop -->
+      <div class="vnode" style="border-left:3px solid var(--purple);border-width:2px;">
+        <div class="vnode-head">
+          <div class="vnode-num" style="background:rgba(139,92,246,0.2);color:var(--purple);">5</div>
+          <span class="vnode-title" style="color:var(--purple);">Deep Research Loop (Max 5 Cycles)</span>
+          <span class="vnode-agent" style="background:rgba(20,184,166,0.1);color:var(--teal);">Accounting Agent</span>
+        </div>
+        <div class="vnode-body">
+          The agent enters an <strong>iterative research loop</strong>. Each cycle targets the weakest dimension of the confidence score. The loop continues until confidence ≥ 95% or max 5 cycles exhausted.<br><br>
+
+          <strong>Each research cycle:</strong>
+          <div class="cycle-ring">
+            <div class="cycle-step"><span class="emoji">🔍</span> Identify weakness<br><span style="font-size:0.68rem;color:var(--dm);">Which confidence dimension is lowest?</span></div>
+            <span class="cycle-arr">→</span>
+            <div class="cycle-step"><span class="emoji">📡</span> Targeted search<br><span style="font-size:0.68rem;color:var(--dm);">Query specific Tier 1-3 sources</span></div>
+            <span class="cycle-arr">→</span>
+            <div class="cycle-step"><span class="emoji">📄</span> Retrieve & parse<br><span style="font-size:0.68rem;color:var(--dm);">Extract relevant articles/clauses</span></div>
+            <span class="cycle-arr">→</span>
+            <div class="cycle-step"><span class="emoji">🧮</span> Re-attempt solution<br><span style="font-size:0.68rem;color:var(--dm);">With new evidence included</span></div>
+            <span class="cycle-arr">→</span>
+            <div class="cycle-step"><span class="emoji">📊</span> Re-score confidence<br><span style="font-size:0.68rem;color:var(--dm);">Did the new info close the gap?</span></div>
+          </div>
+
+          <strong>Research targets per cycle (escalating breadth):</strong>
+          <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0;">
+            <div style="padding:8px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--purple);">Cycle 1</strong><br>
+              <span style="color:var(--dm);">Search existing KB with broader query terms</span>
+            </div>
+            <div style="padding:8px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--purple);">Cycle 2</strong><br>
+              <span style="color:var(--dm);">thuvienphapluat.vn — search for specific circular/công văn</span>
+            </div>
+            <div style="padding:8px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--purple);">Cycle 3</strong><br>
+              <span style="color:var(--dm);">gdt.gov.vn + Big-4 publications for interpretation</span>
+            </div>
+            <div style="padding:8px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--purple);">Cycle 4</strong><br>
+              <span style="color:var(--dm);">Search similar resolved cases in adoption history</span>
+            </div>
+            <div style="padding:8px;background:rgba(139,92,246,0.06);border:1px solid rgba(139,92,246,0.2);border-radius:6px;font-size:0.72rem;text-align:center;">
+              <strong style="color:var(--purple);">Cycle 5</strong><br>
+              <span style="color:var(--dm);">Final attempt — or escalate to human expert</span>
+            </div>
+          </div>
+
+          <div class="conf-meter">
+            <span class="conf-label">After research:</span>
+            <div class="conf-bar">
+              <div class="conf-fill" style="width:97%;background:linear-gradient(90deg,var(--orange),var(--green));"></div>
+            </div>
+            <span class="conf-label" style="color:var(--green);">97%</span>
+            <span class="tag" style="background:rgba(34,197,94,0.15);color:var(--green);">ABOVE THRESHOLD ✓</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span></div>
+
+      <!-- DECISION: After 5 cycles -->
+      <div class="vdecision" style="border-color:var(--red);">
+        <div class="q" style="color:var(--red);">⟁ Still < 95% after 5 cycles?</div>
+        <div class="detail">If research couldn't resolve the gap, this is genuinely novel territory.</div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span></div>
+
+      <!-- STAGE 6: Human Escalation -->
+      <div class="vnode" style="border-left:3px solid var(--red);">
+        <div class="vnode-head">
+          <div class="vnode-num" style="background:rgba(239,68,68,0.15);color:var(--red);">6</div>
+          <span class="vnode-title">Human Expert Escalation</span>
+          <span class="vnode-agent" style="background:rgba(239,68,68,0.1);color:var(--red);">Human Review Queue</span>
+        </div>
+        <div class="vnode-body">
+          If 5 research cycles can't push confidence to ≥ 95%, the question is <strong>genuinely hard or novel</strong>. The agent:<br><br>
+          <strong>1.</strong> Packages its best-effort answer + all research findings + confidence breakdown into a <strong>review ticket</strong>.<br>
+          <strong>2.</strong> Routes to a human accounting expert (via dashboard notification or email).<br>
+          <strong>3.</strong> The human reviews, corrects if needed, and approves the final answer.<br>
+          <strong>4.</strong> The human-approved answer enters Stage 7 as a <strong>gold-standard knowledge unit</strong> (highest trust within adopted knowledge).<br><br>
+          <span style="color:var(--red);font-size:0.82rem;font-weight:600;">The agent NEVER publishes an answer to the community below 95% confidence. Silence is better than a wrong accounting answer.</span>
+        </div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span><span class="albl">≥ 95% confirmed</span></div>
+
+      <!-- STAGE 7: Knowledge Adoption -->
+      <div class="vnode" style="border-left:3px solid var(--green);border-width:2px;">
+        <div class="vnode-head">
+          <div class="vnode-num" style="background:rgba(34,197,94,0.2);color:var(--green);">7</div>
+          <span class="vnode-title" style="color:var(--green);">Knowledge Adoption — Package & Ingest</span>
+          <span class="vnode-agent" style="background:rgba(20,184,166,0.1);color:var(--teal);">Accounting Agent</span>
+        </div>
+        <div class="vnode-body">
+          The confirmed answer becomes a <strong>Knowledge Unit</strong> — a structured, versioned, attributed piece of knowledge that enters the knowledge base permanently.
+
+          <div class="k-unit">
+            <h4>📦 Knowledge Unit Structure</h4>
+            <div class="fields">
+              <div class="k-field"><div class="lbl">ID</div><div class="val">KU-2026-04-0847</div></div>
+              <div class="k-field"><div class="lbl">Source Question</div><div class="val">"Công ty mua máy tính trả bằng CK, hạch toán thế nào?"</div></div>
+              <div class="k-field"><div class="lbl">Scenario</div><div class="val">SME, TT133, computer 15M VND, bank transfer, VAT 10%</div></div>
+              <div class="k-field"><div class="lbl">Answer</div><div class="val">Dr 6423 / Dr 1331 / Cr 112 (expense, not FA, < 30M threshold)</div></div>
+              <div class="k-field"><div class="lbl">Confidence</div><div class="val" style="color:var(--green);">97.2%</div></div>
+              <div class="k-field"><div class="lbl">Supporting Regulations</div><div class="val">TT133 Art.86, TT45/2013 Art.3, NĐ70/2025 Art.4</div></div>
+              <div class="k-field"><div class="lbl">Research Cycles Used</div><div class="val">3 of 5</div></div>
+              <div class="k-field"><div class="lbl">Adoption Path</div><div class="val">auto (≥95%) or human-reviewed</div></div>
+              <div class="k-field"><div class="lbl">GL Accounts Referenced</div><div class="val">6423, 1331, 112</div></div>
+              <div class="k-field"><div class="lbl">Variant Scenarios</div><div class="val">2 (also: enterprise TT99, and FA if ≥30M)</div></div>
+            </div>
+          </div>
+
+          <strong>Adoption targets:</strong><br>
+          <strong>→ Vector Store:</strong> The full Q&A + scenario embedded into Qdrant with rich metadata. Future similar questions will now retrieve this unit.<br>
+          <strong>→ Knowledge Graph:</strong> If the answer introduces new account→transaction pattern relationships, add edges to the graph. E.g., if a new transaction type was mapped to specific GL codes.<br>
+          <strong>→ Golden Set:</strong> High-confidence units (≥98%) or human-reviewed units are added to the <strong>golden_set.json</strong> for regression testing.
+        </div>
+      </div>
+
+      <div class="varrow"><span class="arr">▼</span></div>
+
+      <!-- STAGE 8: Community Response -->
+      <div class="vnode" style="border-left:3px solid var(--gold);">
+        <div class="vnode-head">
+          <div class="vnode-num" style="background:rgba(234,179,8,0.15);color:var(--gold);">8</div>
+          <span class="vnode-title">Community Response (Optional)</span>
+          <span class="vnode-agent" style="background:rgba(236,72,153,0.1);color:var(--pink);">Social Scout Agent</span>
+        </div>
+        <div class="vnode-body">
+          The verified answer is sent back to the Social Scout Agent, which drafts a <strong>helpful, professional reply</strong> to the original community post. The reply includes:<br><br>
+          <strong>1.</strong> The answer with journal entry details<br>
+          <strong>2.</strong> Supporting regulation citations (e.g., "Theo Thông tư 133/2016, Điều 86…")<br>
+          <strong>3.</strong> Explicit assumptions if scenario was auto-generated<br>
+          <strong>4.</strong> A caveat: "Trường hợp cụ thể có thể khác, nên tham khảo kế toán trưởng" (Specific cases may vary, consult your chief accountant)<br><br>
+          <span style="color:var(--gold);font-size:0.82rem;font-weight:600;">This step is optional and configurable — it can be disabled if the tenant only wants passive learning, not community engagement.</span>
+        </div>
+      </div>
+
+    </div><!-- /vflow -->
+  </div><!-- /flow-mega -->
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 3: SAFETY & ANTI-PATTERNS              -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t"><div class="i" style="background:rgba(239,68,68,0.12);color:var(--red);">🛡️</div>Safety Rails & Anti-Patterns</div>
+  <p class="sec-d">This loop is powerful but dangerous if unchecked. These are the hard rules that prevent bad knowledge from contaminating the base.</p>
+
+  <div class="g3">
+    <div class="c" style="border-top:3px solid var(--red);">
+      <h3 style="color:var(--red);">🚫 Never Auto-Adopt Below 95%</h3>
+      <p>No knowledge unit with confidence below 95% enters the knowledge base without human review. The 95% threshold is <strong>not configurable by tenants</strong> — it's a platform invariant for accounting agents. Financial accuracy is non-negotiable.</p>
+    </div>
+    <div class="c" style="border-top:3px solid var(--red);">
+      <h3 style="color:var(--red);">🚫 No Circular Reasoning</h3>
+      <p>The agent cannot use its own previous community answers as Tier 1 evidence for new answers. Adopted knowledge units are tagged <span class="tag" style="background:rgba(20,184,166,0.12);color:var(--teal);">COMMUNITY_DERIVED</span> and can only supplement — never override — Tier 1-2 sources.</p>
+    </div>
+    <div class="c" style="border-top:3px solid var(--red);">
+      <h3 style="color:var(--red);">🚫 No Stale Adoption</h3>
+      <p>Knowledge units inherit the <strong>effective date range</strong> of their supporting regulations. When a regulation is superseded (e.g., TT200 → TT99), all KUs that cite it are automatically flagged for <strong>re-validation or deprecation</strong>.</p>
+    </div>
+    <div class="c" style="border-top:3px solid var(--orange);">
+      <h3 style="color:var(--orange);">⚠️ Contradiction Detection</h3>
+      <p>Before adoption, every new KU is checked against existing knowledge for contradictions. If a new KU says "Dr 642" but existing KU says "Dr 641" for the same scenario → <strong>both are quarantined</strong> and flagged for human review.</p>
+    </div>
+    <div class="c" style="border-top:3px solid var(--orange);">
+      <h3 style="color:var(--orange);">⚠️ Rate Limiting</h3>
+      <p>Max <strong>50 knowledge units adopted per day</strong> without human review. Spike detection: if adoption rate suddenly jumps (e.g., new regulation causes flood of questions), the system switches to <strong>batch review mode</strong> requiring human approval.</p>
+    </div>
+    <div class="c" style="border-top:3px solid var(--orange);">
+      <h3 style="color:var(--orange);">⚠️ Scenario Variant Awareness</h3>
+      <p>The agent must <strong>never adopt a single-scenario answer as universal truth</strong>. If a question could have different correct answers under different assumptions (TT99 vs TT133, SME vs enterprise), <strong>all variants must be captured</strong> in the knowledge unit.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- SECTION 4: METRICS & FEEDBACK LOOP             -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="sec">
+  <div class="sec-t"><div class="i" style="background:rgba(132,204,22,0.12);color:var(--lime);">📈</div>Metrics & Continuous Improvement</div>
+
+  <div class="stats">
+    <div class="stat"><div class="n" style="color:var(--pink);">~200</div><div class="l">Questions collected / week</div></div>
+    <div class="stat"><div class="n" style="color:var(--teal);">~65%</div><div class="l">Answered at ≥95% on first attempt</div></div>
+    <div class="stat"><div class="n" style="color:var(--purple);">~25%</div><div class="l">Required deep research cycles</div></div>
+    <div class="stat"><div class="n" style="color:var(--red);">~10%</div><div class="l">Escalated to human expert</div></div>
+    <div class="stat"><div class="n" style="color:var(--green);">~40</div><div class="l">New KUs adopted / week</div></div>
+  </div>
+
+  <div class="c">
+    <h3 style="color:var(--lime);">🔄 Meta-Agent Integration</h3>
+    <p>The meta-agent observes this sub-workflow via OTel traces and optimizes over time:</p>
+    <ul class="cl" style="margin-top:8px;">
+      <li><strong>First-attempt success rate trending up?</strong> → The knowledge base is getting healthier. The agent is learning.</li>
+      <li><strong>Same question type repeatedly failing?</strong> → Systematic knowledge gap. Trigger a bulk ingestion of the relevant regulation area.</li>
+      <li><strong>Research cycles consistently maxing out (5/5)?</strong> → The Tier 1 sources may have coverage gaps. Escalate to platform team to add new sources.</li>
+      <li><strong>Human expert corrections reveal patterns?</strong> → Use corrections as DPO training signals to improve the agent's reasoning quality.</li>
+      <li><strong>Community engagement on responses (likes/thanks)?</strong> → Positive signal → boost confidence of corresponding knowledge units.</li>
+    </ul>
+  </div>
+
+  <div class="c" style="margin-top:16px;border-left:3px solid var(--gold);">
+    <h3 style="color:var(--gold);">💡 The Flywheel Effect</h3>
+    <p style="font-size:0.9rem;">More community questions → more knowledge gaps discovered → more research → more knowledge units adopted → higher first-attempt success rate → better community responses → more trust → more questions → <strong>the loop accelerates</strong>. After 6 months, the agent should answer >85% of community questions at ≥95% confidence on first attempt — meaning it has deeply learned the practical edge cases that no textbook covers.</p>
+  </div>
+</div>
+
+</body>
+</html>

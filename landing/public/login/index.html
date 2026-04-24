@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Đăng nhập — AgentClan</title>
+<style>
+  @font-face{font-family:'Albula Pro';src:local('Albula Pro'),local('AlbulaPro');font-weight:400;font-style:normal;}
+  @font-face{font-family:'Albula Pro';src:local('Albula Pro Medium'),local('AlbulaPro-Medium');font-weight:500;font-style:normal;}
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{
+    --orange:#e05c20;--orange-h:#f06d30;--orange-glow:rgba(224,92,32,0.10);--orange-bdr:rgba(224,92,32,0.20);
+    --amber:#f5a06a;--amber-dim:rgba(245,160,106,0.15);
+    --bg:#faf8f5;--bg-warm:#f4efe6;--bg-blush:#f6ece0;--bg-stone:#ece6dc;--bg-dark:#1a1008;
+    --surf:#ffffff;--surf-warm:#fdf8f2;
+    --bdr:rgba(30,20,8,0.10);--bdr-warm:rgba(224,92,32,0.16);
+    --text:#19110a;--muted:rgba(25,17,10,0.52);--faint:rgba(25,17,10,0.32);
+    --font:'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;
+  }
+  html,body{height:100%;}
+  body{font-family:var(--font);background:var(--bg);color:var(--text);overflow:hidden;}
+
+  /* ── Split layout ── */
+  .split{display:flex;height:100dvh;}
+  .left{
+    flex:1;position:relative;overflow:hidden;
+    background:linear-gradient(135deg,#1e1040 0%,#0d0820 100%);
+  }
+  .right{
+    width:480px;min-width:480px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:48px 40px;background:var(--bg);
+  }
+
+  /* ── Left panel SVG ── */
+  .hero-svg-wrap{
+    position:absolute;inset:0;
+    display:flex;justify-content:center;
+    overflow:hidden;
+    padding-top:9vh;
+    box-sizing:border-box;
+  }
+  .hero-svg-wrap svg{
+    display:block;
+    transform:scale(0.7);
+    transform-origin:center top;
+  }
+
+  /* Logo + tagline overlay */
+  .left-content{
+    position:absolute;bottom:48px;left:48px;right:48px;z-index:2;
+  }
+  .left-logo{
+    display:flex;align-items:center;gap:10px;
+    font-size:16px;font-weight:500;color:#fff;letter-spacing:-.02em;
+    text-decoration:none;margin-bottom:10px;
+  }
+  .left-logo-mark{
+    width:32px;height:32px;background:var(--orange);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;
+  }
+  .left-tagline{
+    font-size:13px;color:rgba(255,255,255,0.45);font-weight:400;line-height:1.5;
+    max-width:300px;
+  }
+
+  /* Animated accent line */
+  .accent-line{
+    position:absolute;left:48px;top:48px;right:48px;z-index:2;
+    height:1px;background:linear-gradient(90deg,transparent,rgba(224,92,32,0.4),transparent);
+    animation:pulse-line 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse-line{0%,100%{opacity:0.4}50%{opacity:1}}
+
+  /* ── Right panel form ── */
+  .form-wrap{width:100%;max-width:360px;}
+
+  .form-logo{
+    display:flex;align-items:center;gap:10px;
+    font-size:16px;font-weight:500;color:var(--text);letter-spacing:-.02em;
+    text-decoration:none;margin-bottom:40px;
+  }
+  .form-logo-mark{
+    width:32px;height:32px;background:var(--orange);border-radius:8px;
+    display:flex;align-items:center;justify-content:center;font-size:15px;color:#fff;
+  }
+
+  .form-heading{
+    font-size:28px;font-weight:500;color:var(--text);letter-spacing:-.025em;
+    line-height:1.2;margin-bottom:8px;
+  }
+  .form-sub{
+    font-size:14px;color:var(--muted);margin-bottom:32px;line-height:1.6;
+  }
+
+  /* ── OAuth buttons ── */
+  .oauth-btn{
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    width:100%;padding:13px 20px;border-radius:10px;
+    font-family:var(--font);font-size:14px;font-weight:500;
+    cursor:pointer;border:none;transition:all .2s;text-decoration:none;
+    letter-spacing:-.01em;
+  }
+  .oauth-btn:hover{transform:translateY(-1px);}
+  .oauth-btn:active{transform:translateY(0);}
+  .oauth-btn.google{
+    background:#fff;color:#3c4043;
+    border:1px solid #dadce0;box-shadow:0 1px 4px rgba(0,0,0,0.08);
+    margin-bottom:12px;
+  }
+  .oauth-btn.google:hover{border-color:#dadce0;box-shadow:0 4px 16px rgba(0,0,0,0.12);}
+  .oauth-btn.google svg{width:20px;height:20px;}
+  .oauth-btn.github{
+    background:#24292f;color:#fff;
+    border:1px solid rgba(255,255,255,0.12);box-shadow:0 1px 4px rgba(0,0,0,0.16);
+    margin-bottom:20px;
+  }
+  .oauth-btn.github:hover{background:#2f363d;box-shadow:0 4px 16px rgba(0,0,0,0.24);}
+  .oauth-btn.github svg{width:20px;height:20px;}
+
+  .divider{
+    display:flex;align-items:center;gap:12px;margin-bottom:20px;
+  }
+  .divider-line{flex:1;height:1px;background:var(--bdr);}
+  .divider-text{
+    font-size:12px;color:var(--faint);font-weight:500;white-space:nowrap;
+  }
+
+  .info-text{
+    font-size:12px;color:var(--faint);line-height:1.6;text-align:center;
+    margin-top:16px;
+  }
+  .info-text a{color:var(--orange);text-decoration:none;}
+  .info-text a:hover{text-decoration:underline;}
+
+  /* ── Loading state ── */
+  .loading-overlay{
+    display:none;position:fixed;inset:0;z-index:100;
+    background:rgba(250,248,245,0.85);backdrop-filter:blur(8px);
+    align-items:center;justify-content:center;
+  }
+  .loading-overlay.show{display:flex;}
+  .loading-box{
+    text-align:center;
+  }
+  .loading-spinner{
+    width:36px;height:36px;border:2px solid var(--bdr);border-top-color:var(--orange);
+    border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 12px;
+  }
+  .loading-text{font-size:13px;color:var(--muted);}
+
+  /* ── Responsive ── */
+  @media(max-width:768px){
+    .left{display:none;}
+    .right{width:100%;min-width:0;padding:32px 24px;}
+  }
+</style>
+</head>
+<body>
+
+<div class="split">
+  <!-- ── Left: geometric art panel ── -->
+  <div class="left">
+    <!-- ── HERO SVG ── -->
+    <div class="hero-svg-wrap">
+      <svg viewBox="0 0 520 416" xmlns="http://www.w3.org/2000/svg" style="display:block;width:100%;height:100%;">
+        <defs>
+          <linearGradient id="hbg" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%"   stop-color="#1e1040"/>
+            <stop offset="100%" stop-color="#0d0820"/>
+          </linearGradient>
+          <radialGradient id="centerglow" cx="50%" cy="50%" r="50%">
+            <stop offset="0%"   stop-color="#e05c20" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#e05c20" stop-opacity="0"/>
+          </radialGradient>
+          <filter id="blur4"><feGaussianBlur stdDeviation="4"/></filter>
+          <filter id="blur8"><feGaussianBlur stdDeviation="8"/></filter>
+          <filter id="glow2"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+        <!-- Background -->
+        <!-- Background set via CSS .left gradient -->
+        <!-- Subtle grid -->
+        <g stroke="#ffffff" stroke-width="0.3" opacity="0.06">
+          <line x1="0" y1="104" x2="520" y2="104"/><line x1="0" y1="208" x2="520" y2="208"/>
+          <line x1="0" y1="312" x2="520" y2="312"/>
+          <line x1="130" y1="0" x2="130" y2="416"/><line x1="260" y1="0" x2="260" y2="416"/>
+          <line x1="390" y1="0" x2="390" y2="416"/>
+        </g>
+        <!-- Ambient glow behind center -->
+        <circle cx="260" cy="156" r="90" fill="url(#centerglow)" filter="url(#blur8)"/>
+        <!-- CONNECTION LINES (animated draw) -->
+        <g stroke="#e05c20" stroke-width="1.5" fill="none" opacity="0.5">
+          <path d="M225 170 L152 224" stroke-dasharray="120" stroke-dashoffset="120">
+            <animate attributeName="stroke-dashoffset" values="120;0;0" dur="3s" begin="0.5s" repeatCount="indefinite"/>
+          </path>
+          <path d="M295 170 L368 224" stroke-dasharray="120" stroke-dashoffset="120">
+            <animate attributeName="stroke-dashoffset" values="120;0;0" dur="3s" begin="1s" repeatCount="indefinite"/>
+          </path>
+          <path d="M132 258 L96 316" stroke-dasharray="70" stroke-dashoffset="70">
+            <animate attributeName="stroke-dashoffset" values="70;0;0" dur="3s" begin="1.5s" repeatCount="indefinite"/>
+          </path>
+          <path d="M172 258 L212 316" stroke-dasharray="70" stroke-dashoffset="70">
+            <animate attributeName="stroke-dashoffset" values="70;0;0" dur="3s" begin="1.8s" repeatCount="indefinite"/>
+          </path>
+          <path d="M348 258 L308 316" stroke-dasharray="70" stroke-dashoffset="70">
+            <animate attributeName="stroke-dashoffset" values="70;0;0" dur="3s" begin="2s" repeatCount="indefinite"/>
+          </path>
+          <path d="M388 258 L424 316" stroke-dasharray="70" stroke-dashoffset="70">
+            <animate attributeName="stroke-dashoffset" values="70;0;0" dur="3s" begin="2.2s" repeatCount="indefinite"/>
+          </path>
+        </g>
+        <!-- ANIMATED DATA PACKETS -->
+        <circle r="4" fill="#f5a06a" filter="url(#glow2)">
+          <animateMotion dur="2.0s" begin="0.8s" repeatCount="indefinite" path="M225,170 L152,224"/>
+          <animate attributeName="opacity" values="0;1;1;0" dur="2.0s" begin="0.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="4" fill="#f5a06a" filter="url(#glow2)">
+          <animateMotion dur="2.0s" begin="1.4s" repeatCount="indefinite" path="M295,170 L368,224"/>
+          <animate attributeName="opacity" values="0;1;1;0" dur="2.0s" begin="1.4s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="3" fill="#a78bfa">
+          <animateMotion dur="1.6s" begin="1.8s" repeatCount="indefinite" path="M132,258 L96,316"/>
+          <animate attributeName="opacity" values="0;1;1;0" dur="1.6s" begin="1.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle r="3" fill="#34d399">
+          <animateMotion dur="1.6s" begin="2.3s" repeatCount="indefinite" path="M388,258 L424,316"/>
+          <animate attributeName="opacity" values="0;1;1;0" dur="1.6s" begin="2.3s" repeatCount="indefinite"/>
+        </circle>
+        <!-- META-AGENT CENTER NODE -->
+        <circle cx="260" cy="156" r="54" fill="none" stroke="#e05c20" stroke-width="1">
+          <animate attributeName="r"       values="52;72;52"   dur="2.8s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.4;0;0.4"  dur="2.8s" repeatCount="indefinite"/>
+        </circle>
+        <circle cx="260" cy="156" r="60" fill="none" stroke="#e05c20" stroke-width="0.5">
+          <animate attributeName="r"       values="52;88;52"   dur="2.8s" begin="0.4s" repeatCount="indefinite"/>
+          <animate attributeName="opacity" values="0.2;0;0.2"  dur="2.8s" begin="0.4s" repeatCount="indefinite"/>
+        </circle>
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0,0; 0,-6; 0,0" dur="3.5s" repeatCount="indefinite"/>
+          <circle cx="260" cy="156" r="48" fill="#2d1f5e" stroke="#7c3aed" stroke-width="2"/>
+          <circle cx="260" cy="156" r="38" fill="#3d2575" opacity="0.8"/>
+          <circle cx="260" cy="156" r="44" fill="none" stroke="#a78bfa" stroke-width="1" stroke-dasharray="12 6">
+            <animateTransform attributeName="transform" type="rotate" from="0 260 156" to="360 260 156" dur="8s" repeatCount="indefinite"/>
+          </circle>
+          <text x="260" y="149" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#c4b5fd" letter-spacing="1">META</text>
+          <text x="260" y="163" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#c4b5fd" letter-spacing="1">AGENT</text>
+          <text x="260" y="176" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" fill="#e05c20">↻ 24/7</text>
+        </g>
+        <!-- MID NODES -->
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0,0; 0,-4; 0,0" dur="4.2s" begin="0.6s" repeatCount="indefinite"/>
+          <circle cx="152" cy="240" r="34" fill="#1e3a5f" stroke="#3b82f6" stroke-width="1.8"/>
+          <circle cx="152" cy="240" r="26" fill="#1e3a8a" opacity="0.7"/>
+          <text x="152" y="234" text-anchor="middle" font-size="17">🎧</text>
+          <text x="152" y="253" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#93c5fd">Support</text>
+        </g>
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0,0; 0,-5; 0,0" dur="3.8s" begin="1.1s" repeatCount="indefinite"/>
+          <circle cx="368" cy="240" r="34" fill="#1a3828" stroke="#059669" stroke-width="1.8"/>
+          <circle cx="368" cy="240" r="26" fill="#065f46" opacity="0.7"/>
+          <text x="368" y="234" text-anchor="middle" font-size="17">💼</text>
+          <text x="368" y="253" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#6ee7b7">Sales</text>
+        </g>
+        <!-- LEAF NODES -->
+        <g opacity="0.9">
+          <circle cx="96" cy="338" r="26" fill="#2d1b00" stroke="#f59e0b" stroke-width="1.5"/>
+          <text x="96" y="332" text-anchor="middle" font-size="13">📊</text>
+          <text x="96" y="350" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="10" font-weight="500" fill="#fcd34d">Accounting</text>
+          <circle cx="212" cy="338" r="26" fill="#1a1f38" stroke="#818cf8" stroke-width="1.5"/>
+          <text x="212" y="332" text-anchor="middle" font-size="13">✍️</text>
+          <text x="212" y="350" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#a5b4fc">SEO</text>
+          <circle cx="308" cy="338" r="26" fill="#1e2d1a" stroke="#4ade80" stroke-width="1.5"/>
+          <text x="308" y="332" text-anchor="middle" font-size="13">🔎</text>
+          <text x="308" y="350" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#86efac">Scout</text>
+          <circle cx="424" cy="338" r="26" fill="#2d1a2a" stroke="#e879f9" stroke-width="1.5"/>
+          <text x="424" y="332" text-anchor="middle" font-size="13">🛠️</text>
+          <text x="424" y="350" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="11" font-weight="500" fill="#f0abfc">Builder</text>
+        </g>
+        <!-- Bottom label -->
+        <rect x="170" y="380" width="180" height="26" rx="13" fill="#e05c20" opacity="0.18" stroke="#e05c20" stroke-width="1" opacity="0.4"/>
+        <text x="260" y="398" text-anchor="middle" font-family="'Albula Pro','Be Vietnam Pro',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif" font-size="13" font-weight="500" fill="#f5a06a">↻ Self-improving, 24/7</text>
+      </svg>
+    </div>
+    <div class="accent-line"></div>
+    <div class="left-content">
+      <a href="/" class="left-logo">
+        <div class="left-logo-mark">⚡</div>AgentClan
+      </a>
+      <p class="left-tagline">Nền tảng quản lý Agent AI — tạo, triển khai và tự động cải thiện agents của bạn.</p>
+    </div>
+  </div>
+
+  <!-- ── Right: auth form ── -->
+  <div class="right">
+    <div class="form-wrap">
+      <a href="/" class="form-logo">
+        <div class="form-logo-mark">⚡</div>AgentClan
+      </a>
+
+      <h1 class="form-heading">Chào mừng trở lại</h1>
+      <p class="form-sub">Đăng nhập để truy cập workspace và tiếp tục xây dựng agents.</p>
+
+      <!-- Google -->
+      <button class="oauth-btn google" onclick="startOAuth('google')">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+          <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+          <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+          <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+        </svg>
+        Tiếp tục với Google
+      </button>
+
+      <!-- GitHub -->
+      <button class="oauth-btn github" onclick="startOAuth('github')">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="currentColor">
+          <path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/>
+        </svg>
+        Tiếp tục với GitHub
+      </button>
+
+      <div class="divider">
+        <div class="divider-line"></div>
+        <span class="divider-text">OAuth an toàn &amp; bảo mật</span>
+        <div class="divider-line"></div>
+      </div>
+
+      <p class="info-text">
+        Bằng cách tiếp tục, bạn đồng ý với<br>
+        <a href="#">Điều khoản dịch vụ</a> &amp; <a href="#">Chính sách bảo mật</a> của AgentClan.
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- Loading overlay -->
+<div class="loading-overlay" id="loading">
+  <div class="loading-box">
+    <div class="loading-spinner"></div>
+    <div class="loading-text">Đang chuyển hướng đến Google...</div>
+  </div>
+</div>
+
+<script>
+function startOAuth(provider) {
+  var btn = provider === 'google'
+    ? document.querySelector('.oauth-btn.google')
+    : document.querySelector('.oauth-btn.github');
+  btn.disabled = true;
+  document.getElementById('loading').classList.add('show');
+
+  fetch('/api/v1/auth/' + provider + '?agent=default')
+    .then(function(r){ return r.json(); })
+    .then(function(data){
+      if (data.redirect_url) {
+        window.location.href = data.redirect_url;
+      } else {
+        document.getElementById('loading').classList.remove('show');
+        btn.disabled = false;
+        alert('Không thể bắt đầu OAuth. Vui lòng thử lại.');
+      }
+    })
+    .catch(function(){
+      document.getElementById('loading').classList.remove('show');
+      btn.disabled = false;
+      alert('Lỗi kết nối. Vui lòng thử lại.');
+    });
+}
+
+// If already logged in, redirect to dashboard
+(function(){
+  var token = localStorage.getItem('ac_token');
+  if (token) {
+    window.location.href = '/dashboard';
+  }
+})();
+</script>
+</body>
+</html>

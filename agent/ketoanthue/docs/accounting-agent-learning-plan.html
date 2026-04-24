@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Accounting Agent — Learning Plan & Knowledge Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:wght@700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #08090d;
+  --surface: #10131a;
+  --surface2: #181c26;
+  --surface3: #1f2430;
+  --border: #272d3d;
+  --text: #e2e6f0;
+  --dim: #7c8599;
+  --gold: #eab308;
+  --green: #22c55e;
+  --blue: #3b82f6;
+  --purple: #8b5cf6;
+  --red: #ef4444;
+  --orange: #f97316;
+  --teal: #14b8a6;
+  --pink: #ec4899;
+  --cyan: #06b6d4;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); line-height:1.65; }
+
+/* Header */
+.hero { text-align:center; padding:80px 40px 30px; position:relative; }
+.hero::before { content:''; position:absolute; top:0; left:0; right:0; height:500px;
+  background:radial-gradient(ellipse at 50% 0%, rgba(139,92,246,0.08) 0%, transparent 60%); pointer-events:none; }
+.hero h1 { font-family:'Fraunces',serif; font-size:3rem; font-weight:900;
+  background:linear-gradient(135deg,var(--purple),#fff,var(--teal));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; letter-spacing:-1.5px; margin-bottom:10px; }
+.hero .sub { color:var(--dim); font-size:1rem; max-width:750px; margin:0 auto; }
+
+/* Tab system */
+.tabs { display:flex; justify-content:center; gap:4px; padding:16px 20px; position:sticky; top:0; z-index:100;
+  background:rgba(8,9,13,0.92); backdrop-filter:blur(16px); border-bottom:1px solid var(--border); flex-wrap:wrap; }
+.tab { padding:10px 22px; background:transparent; border:1px solid var(--border); color:var(--dim);
+  font-family:'DM Sans'; font-size:0.82rem; font-weight:500; cursor:pointer; border-radius:8px; transition:all 0.25s; }
+.tab:hover { border-color:var(--purple); color:var(--text); }
+.tab.on { background:var(--purple); color:#fff; border-color:var(--purple); font-weight:600; }
+.pane { display:none; } .pane.on { display:block; }
+
+/* Sections */
+.sec { max-width:1400px; margin:0 auto; padding:50px 36px; }
+.sec-title { font-family:'Fraunces',serif; font-size:1.8rem; font-weight:800; margin-bottom:6px;
+  display:flex; align-items:center; gap:12px; }
+.sec-title .ico { width:42px; height:42px; border-radius:11px; display:flex; align-items:center;
+  justify-content:center; font-size:1.2rem; flex-shrink:0; }
+.sec-desc { color:var(--dim); font-size:0.92rem; margin-bottom:32px; max-width:800px; }
+
+/* Cards */
+.card { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:28px; }
+.card h3 { font-size:1.05rem; font-weight:600; margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.card p, .card li { font-size:0.88rem; color:var(--dim); line-height:1.7; }
+.card p strong, .card li strong { color:var(--text); }
+
+/* Source table */
+.src-table { width:100%; border-collapse:collapse; margin:20px 0; }
+.src-table th { text-align:left; padding:10px 14px; font-size:0.72rem; font-weight:600;
+  text-transform:uppercase; letter-spacing:1px; color:var(--dim); border-bottom:2px solid var(--border); }
+.src-table td { padding:12px 14px; font-size:0.85rem; border-bottom:1px solid rgba(39,45,61,0.5); vertical-align:top; }
+.src-table tr:hover { background:var(--surface2); }
+
+/* Trust badges */
+.trust { display:inline-block; padding:3px 10px; border-radius:5px; font-size:0.7rem; font-weight:600; }
+.trust.t1 { background:rgba(34,197,94,0.15); color:var(--green); }
+.trust.t2 { background:rgba(59,130,246,0.15); color:var(--blue); }
+.trust.t3 { background:rgba(249,115,22,0.15); color:var(--orange); }
+.trust.t4 { background:rgba(239,68,68,0.15); color:var(--red); }
+
+/* Grid layouts */
+.g2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.g3 { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:18px; }
+.g4 { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:16px; }
+@media(max-width:768px) { .g2,.g3,.g4 { grid-template-columns:1fr; } }
+
+/* Flow diagram */
+.flow { display:flex; align-items:stretch; gap:0; overflow-x:auto; padding:16px 0; }
+.flow-node { min-width:155px; background:var(--surface2); border:1px solid var(--border);
+  border-radius:10px; padding:16px; text-align:center; flex-shrink:0; }
+.flow-node .label { font-family:'JetBrains Mono'; font-size:0.62rem; color:var(--dim);
+  text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; }
+.flow-node h5 { font-size:0.82rem; font-weight:600; margin-bottom:4px; }
+.flow-node p { font-size:0.7rem; color:var(--dim); line-height:1.4; }
+.flow-arr { display:flex; align-items:center; justify-content:center; min-width:32px; color:var(--purple); font-size:1rem; flex-shrink:0; }
+
+/* User story cards */
+.story { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:24px; margin-bottom:16px; }
+.story .tag { display:inline-block; padding:3px 10px; border-radius:5px; font-size:0.68rem; font-weight:600;
+  margin-bottom:10px; text-transform:uppercase; letter-spacing:0.5px; }
+.story h4 { font-size:0.95rem; font-weight:600; margin-bottom:8px; }
+.story .scenario { font-size:0.85rem; color:var(--dim); line-height:1.7; margin-bottom:12px;
+  padding:12px 16px; background:var(--surface2); border-radius:8px; border-left:3px solid var(--purple); }
+.story .expect { font-size:0.82rem; color:var(--dim); }
+.story .expect strong { color:var(--teal); }
+
+/* KG section */
+.kg-verdict { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:32px; margin:24px 0; }
+.kg-verdict h3 { font-size:1.1rem; font-weight:700; margin-bottom:14px; }
+.pro-con { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin:16px 0; }
+.pro-con > div { padding:16px; border-radius:10px; }
+.pro-con .pro { background:rgba(34,197,94,0.06); border:1px solid rgba(34,197,94,0.2); }
+.pro-con .con { background:rgba(239,68,68,0.06); border:1px solid rgba(239,68,68,0.2); }
+.pro-con h4 { font-size:0.85rem; font-weight:600; margin-bottom:8px; }
+.pro-con li { font-size:0.82rem; color:var(--dim); padding:3px 0; list-style:none; }
+.pro-con .pro li::before { content:'✓ '; color:var(--green); font-weight:700; }
+.pro-con .con li::before { content:'✗ '; color:var(--red); font-weight:700; }
+
+/* Mega diagram */
+.mega { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:36px; margin:32px 0; overflow-x:auto; }
+.mega h3 { text-align:center; font-size:1.15rem; font-weight:600; margin-bottom:24px; }
+
+/* Layer diagram */
+.layer { margin:12px 0; padding:20px 24px; border-radius:12px; border:1px solid var(--border); position:relative; }
+.layer-label { font-family:'JetBrains Mono'; font-size:0.68rem; text-transform:uppercase; letter-spacing:1.2px;
+  position:absolute; top:-10px; left:20px; padding:0 8px; }
+.layer .items { display:flex; flex-wrap:wrap; gap:10px; margin-top:6px; }
+.layer .item { background:var(--surface2); border:1px solid var(--border); border-radius:8px;
+  padding:10px 14px; font-size:0.78rem; }
+.layer .item strong { display:block; font-size:0.75rem; margin-bottom:2px; }
+.layer .item span { color:var(--dim); font-size:0.7rem; }
+
+/* Connector arrows between layers */
+.layer-arrow { text-align:center; padding:6px 0; color:var(--dim); font-size:0.9rem; }
+
+/* Stats row */
+.stats { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; margin:24px 0; }
+.stat { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:20px; text-align:center; }
+.stat .num { font-size:1.8rem; font-weight:700; }
+.stat .lbl { font-size:0.78rem; color:var(--dim); margin-top:2px; }
+@media(max-width:600px) { .stats { grid-template-columns:1fr 1fr; } }
+
+/* Mono text */
+.mono { font-family:'JetBrains Mono',monospace; }
+ul.clean { list-style:none; } ul.clean li { padding:4px 0; }
+ul.clean li::before { content:'› '; color:var(--gold); font-weight:700; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Accounting Agent Learning Plan</h1>
+  <p class="sub">How the agent acquires, validates, and operationalizes accounting & tax knowledge — starting with Vietnam. Source taxonomy, ingestion pipeline, knowledge graph analysis, user stories, and trust architecture.</p>
+</div>
+
+<div class="tabs">
+  <button class="tab on" onclick="go('p1')">📚 Source Taxonomy</button>
+  <button class="tab" onclick="go('p2')">🔄 Ingestion Pipeline</button>
+  <button class="tab" onclick="go('p3')">🧠 Knowledge Graph?</button>
+  <button class="tab" onclick="go('p4')">👤 User Stories</button>
+  <button class="tab" onclick="go('p5')">🏗️ Full Architecture</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PANE 1: SOURCE TAXONOMY                                -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="p1" class="pane on">
+<div class="sec">
+  <div class="sec-title"><div class="ico" style="background:rgba(139,92,246,0.15);color:var(--purple);">📚</div>Source Taxonomy & Trust Hierarchy</div>
+  <p class="sec-desc">Not all knowledge is equal. The agent must learn from a strict hierarchy: law first, then official guidance, then Big-4 analysis, then community — never the reverse. Every piece of knowledge carries a trust tier.</p>
+
+  <div class="card" style="margin-bottom:24px;">
+    <h3 style="color:var(--gold);">🎯 Core Principle: Selective & Tiered Ingestion</h3>
+    <p>The agent does NOT crawl the internet randomly. It follows a <strong>4-tier trust hierarchy</strong>. Higher tiers override lower tiers when they conflict. The agent always cites its source tier when giving advice, and refuses to act on Tier 4 content alone for anything involving journal entries, tax calculations, or compliance.</p>
+  </div>
+
+  <!-- Trust Tier Definition -->
+  <div class="g4" style="margin-bottom:32px;">
+    <div class="card" style="border-top:3px solid var(--green);">
+      <h3><span class="trust t1">Tier 1</span> Primary Law</h3>
+      <p><strong>Authoritative & immutable.</strong> The actual text of laws, decrees, and circulars as published by the government. The agent treats this as ground truth. No interpretation — just the law.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--blue);">
+      <h3><span class="trust t2">Tier 2</span> Official Guidance</h3>
+      <p><strong>Interpretive authority.</strong> Official guidance documents (công văn), ministry Q&A, GDT instructions, and official FAQs from tax authorities. These clarify how to apply Tier 1 laws.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--orange);">
+      <h3><span class="trust t3">Tier 3</span> Expert Analysis</h3>
+      <p><strong>Professional interpretation.</strong> Big-4 publications (PwC, KPMG, EY, Deloitte), law firms, licensed accounting firms. High quality but represents opinion, not authority.</p>
+    </div>
+    <div class="card" style="border-top:3px solid var(--red);">
+      <h3><span class="trust t4">Tier 4</span> Community / Education</h3>
+      <p><strong>Practical but unverified.</strong> Accounting blogs, training sites, forums, how-to articles. Useful for understanding common practices but never authoritative. Cross-check against Tier 1-2 before use.</p>
+    </div>
+  </div>
+
+  <!-- Vietnam Source Map -->
+  <div class="sec-title" style="font-size:1.3rem;"><div class="ico" style="background:rgba(234,179,8,0.15);color:var(--gold);">🇻🇳</div>Vietnam — Source Map</div>
+  <p class="sec-desc">Every source rated by trust tier, content type, update frequency, and ingestion method.</p>
+
+  <table class="src-table">
+    <thead>
+      <tr><th>Source</th><th>Trust</th><th>Content</th><th>Update Freq.</th><th>Ingestion Method</th></tr>
+    </thead>
+    <tbody>
+      <!-- TIER 1 -->
+      <tr>
+        <td><strong>thuvienphapluat.vn</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">Vietnamese Legal Library</span></td>
+        <td><span class="trust t1">Tier 1</span></td>
+        <td>Full text of all Vietnamese laws, decrees, circulars. Accounting Law 2015, Circular 99/2025, Circular 133/2016, all 26 VAS standards, Decree 123/2020 (e-invoicing), Decree 70/2025</td>
+        <td>Real-time (as published)</td>
+        <td>Structured scraping of legal documents by document number. Extract article-by-article. Version tracking for amendments.</td>
+      </tr>
+      <tr>
+        <td><strong>gdt.gov.vn</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">General Dept. of Taxation</span></td>
+        <td><span class="trust t1">Tier 1</span></td>
+        <td>Tax policies, VAT/CIT/PIT regulations, e-invoice rules, tax declaration forms (HTKK), official tax guidance, penalty schedules</td>
+        <td>Weekly updates</td>
+        <td>RSS/sitemap monitoring. Extract policy announcements and guidance documents. Parse tax rate tables.</td>
+      </tr>
+      <tr>
+        <td><strong>mof.gov.vn</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">Ministry of Finance</span></td>
+        <td><span class="trust t1">Tier 1</span></td>
+        <td>Chart of Accounts (official), accounting standards development, IFRS transition roadmap, circular drafts, fiscal policy</td>
+        <td>Monthly</td>
+        <td>Targeted document download. Track circular issuance. Extract CoA appendices as structured data.</td>
+      </tr>
+      <tr>
+        <td><strong>chinhphu.vn</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">Government Portal</span></td>
+        <td><span class="trust t1">Tier 1</span></td>
+        <td>Decrees (Nghị định), National Assembly resolutions, VAT law changes (Law 48/2024), Global Minimum Tax (Decree 236/2025)</td>
+        <td>As enacted</td>
+        <td>Legal document extraction by decree number. Cross-reference with thuvienphapluat.vn for completeness.</td>
+      </tr>
+      <!-- TIER 2 -->
+      <tr>
+        <td><strong>GDT Official Letters (Công văn)</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">via thuvienphapluat.vn</span></td>
+        <td><span class="trust t2">Tier 2</span></td>
+        <td>Tax authority responses to specific taxpayer queries. Clarifies how laws apply in ambiguous situations. E.g., Công văn 4457 on invoice rules.</td>
+        <td>Daily (hundreds/year)</td>
+        <td>Filter by accounting/tax topic codes. Extract Q&A pairs. Tag by GL account and tax type for retrieval.</td>
+      </tr>
+      <tr>
+        <td><strong>Provincial Tax Dept. guidance</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">Cục thuế TP.HCM, Hà Nội, etc.</span></td>
+        <td><span class="trust t2">Tier 2</span></td>
+        <td>Local tax guidance, HTKK filing instructions, annual tax finalization guidance (quyết toán thuế)</td>
+        <td>Seasonal (tax season peaks)</td>
+        <td>Monitor provincial tax websites. Extract practical guidance and filing instructions.</td>
+      </tr>
+      <!-- TIER 3 -->
+      <tr>
+        <td><strong>PwC Vietnam</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">pwc.com/vn</span></td>
+        <td><span class="trust t3">Tier 3</span></td>
+        <td>VAS vs. IFRS gap analysis, tax guides, regulatory alerts, transfer pricing guides</td>
+        <td>Quarterly</td>
+        <td>PDF ingestion of publications. Extract comparison tables as structured data.</td>
+      </tr>
+      <tr>
+        <td><strong>KPMG Vietnam</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">assets.kpmg.com/vn</span></td>
+        <td><span class="trust t3">Tier 3</span></td>
+        <td>IFRS-VAS gap analysis (detailed 26-standard comparison), tax alerts, investment guides</td>
+        <td>Quarterly</td>
+        <td>PDF ingestion. Parse standard-by-standard comparison into structured records.</td>
+      </tr>
+      <tr>
+        <td><strong>EY Vietnam</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">ey.com/en_vn</span></td>
+        <td><span class="trust t3">Tier 3</span></td>
+        <td>Tax alerts (e.g., Decree 70 e-invoicing changes), regulatory updates, industry reports</td>
+        <td>Monthly</td>
+        <td>RSS monitoring of tax alert feed. Extract regulatory change summaries.</td>
+      </tr>
+      <tr>
+        <td><strong>Deloitte / Crowe Vietnam</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">deloitte.com/vn, crowe.com/vn</span></td>
+        <td><span class="trust t3">Tier 3</span></td>
+        <td>Circular 99 analysis, accounting regime change guides, audit methodology</td>
+        <td>Quarterly</td>
+        <td>PDF and article ingestion. Focus on Circular 99 vs. Circular 200 comparison content.</td>
+      </tr>
+      <tr>
+        <td><strong>Vietnam Briefing</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">vietnam-briefing.com</span></td>
+        <td><span class="trust t3">Tier 3</span></td>
+        <td>Practical compliance guides for foreign investors, VAS overview, tax updates, Circular 99 explainers</td>
+        <td>Monthly</td>
+        <td>Article extraction with date tracking. Tag by regulation reference number.</td>
+      </tr>
+      <tr>
+        <td><strong>Law firms</strong> (Viet An Law, VILAF, etc.)</td>
+        <td><span class="trust t3">Tier 3</span></td>
+        <td>Legal analysis of accounting/tax regulation changes. Practical compliance advice.</td>
+        <td>As published</td>
+        <td>Selective article ingestion. Only articles with specific circular/decree references.</td>
+      </tr>
+      <!-- TIER 4 -->
+      <tr>
+        <td><strong>amis.misa.vn</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">MISA Blog</span></td>
+        <td><span class="trust t4">Tier 4</span></td>
+        <td>Practical how-to articles: journal entry examples, GL account usage, tax filing steps, Circular 99 vs. 200 differences</td>
+        <td>Daily</td>
+        <td>Selective crawl — only articles tagged kế toán, thuế. Cross-validate examples against Tier 1 circulars before ingestion.</td>
+      </tr>
+      <tr>
+        <td><strong>ketoan.vn</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">Accounting community</span></td>
+        <td><span class="trust t4">Tier 4</span></td>
+        <td>Community knowledge, Q&A, practical accounting tips, industry-specific accounting guides</td>
+        <td>Daily</td>
+        <td>Selective extraction of high-engagement articles. Require circular reference for ingestion.</td>
+      </tr>
+      <tr>
+        <td><strong>ketoanleanh.edu.vn</strong><br><span class="mono" style="font-size:0.72rem;color:var(--dim);">Training content</span></td>
+        <td><span class="trust t4">Tier 4</span></td>
+        <td>Structured accounting training: journal entry patterns, financial statement preparation, software usage</td>
+        <td>Monthly</td>
+        <td>Extract worked examples only — journal entry patterns with GL codes. Use as few-shot training data after validation.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card" style="margin-top:24px; border-left:3px solid var(--gold);">
+    <h3 style="color:var(--gold);">⚠️ Critical Filter Rules</h3>
+    <p style="margin-bottom:8px;"><strong>1. Regulation citations required:</strong> Any accounting guidance must reference a specific law, circular, or decree number. Content without legal references is flagged as "unverified practice" and cannot be used for journal entries or tax calculations.</p>
+    <p style="margin-bottom:8px;"><strong>2. Date-aware override:</strong> Circular 99/2025 replaces Circular 200/2014 from Jan 1, 2026. The agent must track effective dates and automatically deprecate superseded content. Same for Decree 70/2025 replacing Decree 123/2020 on e-invoicing.</p>
+    <p style="margin-bottom:8px;"><strong>3. No Tier-4-only decisions:</strong> If the only supporting evidence for an accounting treatment comes from Tier 4 sources, the agent MUST escalate to a human accountant rather than proceed.</p>
+    <p><strong>4. Vietnamese language priority:</strong> Original Vietnamese legal text is authoritative. English translations are for reference only. The agent must store and reason from Vietnamese originals.</p>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PANE 2: INGESTION PIPELINE                             -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="p2" class="pane">
+<div class="sec">
+  <div class="sec-title"><div class="ico" style="background:rgba(20,184,166,0.15);color:var(--teal);">🔄</div>Knowledge Ingestion Pipeline</div>
+  <p class="sec-desc">How knowledge flows from raw sources into the agent's operational memory — with validation, structuring, and version control at every step.</p>
+
+  <!-- Phase Overview -->
+  <div class="mega">
+    <h3 style="color:var(--teal);">5-Phase Ingestion Pipeline</h3>
+    <div class="flow">
+      <div class="flow-node" style="border-color:var(--green);">
+        <div class="label" style="color:var(--green);">Phase 1</div>
+        <h5>Discover & Crawl</h5>
+        <p>Monitor sources on schedule. Detect new/changed docs. Download raw content.</p>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-node" style="border-color:var(--blue);">
+        <div class="label" style="color:var(--blue);">Phase 2</div>
+        <h5>Parse & Structure</h5>
+        <p>Extract articles, sections, tables. Assign document metadata & trust tier.</p>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-node" style="border-color:var(--purple);">
+        <div class="label" style="color:var(--purple);">Phase 3</div>
+        <h5>Validate & Filter</h5>
+        <p>Check for legal references. Cross-validate Tier 4 against Tier 1. Detect contradictions.</p>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-node" style="border-color:var(--orange);">
+        <div class="label" style="color:var(--orange);">Phase 4</div>
+        <h5>Chunk & Embed</h5>
+        <p>Semantic chunking. Embed into Qdrant. Tag with GL codes, tax types, effective dates.</p>
+      </div>
+      <div class="flow-arr">→</div>
+      <div class="flow-node" style="border-color:var(--gold);">
+        <div class="label" style="color:var(--gold);">Phase 5</div>
+        <h5>Index & Serve</h5>
+        <p>Knowledge graph relations. Version control. Serve via retrieval pipeline to agent modules.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Detailed phases -->
+  <div class="g2" style="margin-top:24px;">
+    <div class="card">
+      <h3 style="color:var(--green);">Phase 1: Discovery & Crawl</h3>
+      <ul class="clean">
+        <li><strong>Scheduled crawlers</strong> per source: thuvienphapluat.vn checked every 6 hours for new circulars/decrees; gdt.gov.vn daily; Big-4 sites weekly</li>
+        <li><strong>Change detection:</strong> Hash-based for legal docs (any change triggers re-ingestion); date-based for articles</li>
+        <li><strong>Priority queue:</strong> Tier 1 changes jump to front of ingestion queue and trigger downstream re-validation</li>
+        <li><strong>Format handling:</strong> HTML article → markdown; PDF circular → OCR + structured extraction; DOCX appendices (CoA tables) → JSON</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--blue);">Phase 2: Parse & Structure</h3>
+      <ul class="clean">
+        <li><strong>Legal document parser:</strong> Splits circulars into Điều (Article) → Khoản (Clause) → Điểm (Point) hierarchy. Each unit gets a unique ID: <span class="mono" style="font-size:0.78rem;">TT99-2025.Đ31.K2.Đ.a</span></li>
+        <li><strong>Metadata extraction:</strong> Document number, issuing authority, effective date, superseded document, amendment chain</li>
+        <li><strong>Chart of Accounts parser:</strong> Extract official CoA from Circular 99 appendix into structured <span class="mono" style="font-size:0.78rem;">{code, name, level, parent, debit_nature, credit_nature}</span></li>
+        <li><strong>Tax rate extractor:</strong> Parse VAT rates, CIT rates, PIT brackets into versioned lookup tables with effective date ranges</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--purple);">Phase 3: Validate & Filter</h3>
+      <ul class="clean">
+        <li><strong>Legal reference check:</strong> Every knowledge chunk must cite at least one Circular/Decree/Law number to pass. Chunks without citations are quarantined.</li>
+        <li><strong>Cross-tier validation:</strong> Tier 4 content (e.g., MISA blog example showing Dr 641/Cr 111) is validated against Tier 1 account definitions in Circular 99 CoA</li>
+        <li><strong>Contradiction detection:</strong> If Tier 3 analysis contradicts Tier 1 text, flag for human review. The system defaults to Tier 1.</li>
+        <li><strong>Effective date filter:</strong> Automatically tag content as <span class="trust t1">CURRENT</span>, <span class="trust t3">TRANSITIONAL</span>, or <span class="trust t4">SUPERSEDED</span> based on circular effective dates</li>
+        <li><strong>Staleness detection:</strong> Content referencing Circular 200 after Jan 1 2026 is auto-flagged as potentially outdated</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 style="color:var(--orange);">Phase 4: Chunk & Embed</h3>
+      <ul class="clean">
+        <li><strong>Semantic chunking:</strong> Legal articles stay as atomic units (don't split mid-article). Practical guides chunked by accounting topic/GL account.</li>
+        <li><strong>Rich metadata per chunk:</strong> trust_tier, source_url, document_number, effective_date, gl_accounts[], tax_types[], industry_codes[]</li>
+        <li><strong>Multi-lingual embedding:</strong> Jina v5 (<span class="mono" style="font-size:0.78rem;">jina-embeddings-v5-text-small</span>) — 1024-dim vectors with <span class="mono" style="font-size:0.78rem;">retrieval.passage</span> / <span class="mono" style="font-size:0.78rem;">retrieval.query</span> task types. Native Vietnamese + English support. Falls back to deterministic hash-based stubs when API key is unavailable.</li>
+        <li><strong>Qdrant collection per country:</strong> <span class="mono" style="font-size:0.78rem;">accounting_vn</span>, future: <span class="mono" style="font-size:0.78rem;">accounting_sg</span>, <span class="mono" style="font-size:0.78rem;">accounting_th</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Knowledge types -->
+  <div class="sec-title" style="font-size:1.3rem; margin-top:40px;"><div class="ico" style="background:rgba(234,179,8,0.15);color:var(--gold);">📦</div>What Gets Ingested — Knowledge Categories</div>
+
+  <div class="g3" style="margin-top:16px;">
+    <div class="card" style="border-top:3px solid var(--green);">
+      <h3>📗 Regulatory Knowledge</h3>
+      <p><strong>The rules.</strong> What you MUST do. This is the foundation.</p>
+      <ul class="clean">
+        <li>Accounting Law 2015 (Luật Kế toán)</li>
+        <li>Circular 99/2025 (replaces TT200) — full enterprise accounting regime</li>
+        <li>Circular 133/2016 — SME accounting regime</li>
+        <li>26 VAS standards (VAS 01–26)</li>
+        <li>VAT Law 48/2024 + Decree 181/2025</li>
+        <li>CIT regulations + Decree 320/2025</li>
+        <li>E-invoice: Decree 70/2025, Circular 32/2025</li>
+        <li>Penalty: Decree 310/2025</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--blue);">
+      <h3>📘 Structural Knowledge</h3>
+      <p><strong>The framework.</strong> The skeleton of accounting operations.</p>
+      <ul class="clean">
+        <li>Official Chart of Accounts (per Circular 99/2025 appendix) — all GL codes, names, debit/credit nature</li>
+        <li>Financial statement templates (B01-DN Balance Sheet, B02-DN P&L, B03-DN Cash Flow, B09-DN Notes)</li>
+        <li>Tax rate tables: VAT (0%, 5%, 8%, 10%), CIT (20%), PIT brackets</li>
+        <li>Depreciation schedules (Circular 45/2013)</li>
+        <li>E-invoice format (XML schema per Decree 70)</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--orange);">
+      <h3>📙 Procedural Knowledge</h3>
+      <p><strong>The how-to.</strong> Practical patterns for actual accounting work.</p>
+      <ul class="clean">
+        <li>Journal entry patterns per transaction type (purchase, sale, payroll, depreciation, FX, tax)</li>
+        <li>3-way matching procedure (PO → GR → Invoice)</li>
+        <li>Month-end close checklist for VN accounting</li>
+        <li>Tax filing procedures (HTKK software)</li>
+        <li>Bank reconciliation best practices</li>
+        <li>Common accounting mistakes & corrections</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Update schedule -->
+  <div class="card" style="margin-top:24px;">
+    <h3 style="color:var(--cyan);">🔄 Continuous Learning Schedule</h3>
+    <p style="margin-bottom:12px;">The agent's knowledge is NOT static. It follows a strict update cadence:</p>
+    <div class="g4">
+      <div style="padding:12px; background:var(--surface2); border-radius:8px;">
+        <strong style="color:var(--green); font-size:0.82rem;">Every 6 hours</strong>
+        <p style="font-size:0.78rem;">thuvienphapluat.vn — new circulars, decrees, công văn</p>
+      </div>
+      <div style="padding:12px; background:var(--surface2); border-radius:8px;">
+        <strong style="color:var(--blue); font-size:0.82rem;">Daily</strong>
+        <p style="font-size:0.78rem;">gdt.gov.vn — tax policy updates, e-invoice guidance</p>
+      </div>
+      <div style="padding:12px; background:var(--surface2); border-radius:8px;">
+        <strong style="color:var(--purple); font-size:0.82rem;">Weekly</strong>
+        <p style="font-size:0.78rem;">Big-4 publications, Vietnam Briefing, law firm alerts</p>
+      </div>
+      <div style="padding:12px; background:var(--surface2); border-radius:8px;">
+        <strong style="color:var(--orange); font-size:0.82rem;">Monthly</strong>
+        <p style="font-size:0.78rem;">Community sources (MISA, ketoan.vn) — re-validate against current Tier 1</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PANE 3: KNOWLEDGE GRAPH ANALYSIS                       -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="p3" class="pane">
+<div class="sec">
+  <div class="sec-title"><div class="ico" style="background:rgba(139,92,246,0.15);color:var(--purple);">🧠</div>Does the Accounting Agent Need a Knowledge Graph?</div>
+  <p class="sec-desc">Analyzing whether Apache AGE (the graph extension already in the AgentClan stack) adds meaningful value for accounting knowledge specifically.</p>
+
+  <div class="kg-verdict">
+    <h3 style="color:var(--gold);">🎯 Verdict: YES — but scoped, not everything.</h3>
+    <p style="font-size:0.9rem; color:var(--dim); margin-bottom:16px;">Accounting is inherently <strong>relational</strong> — accounts have parent-child hierarchies, transactions link vendors to invoices to GL codes to tax types to reporting lines. A flat vector store struggles with multi-hop queries like "which expense accounts under COGS (TK 632) are affected by the new Circular 99 depreciation rules?" The graph excels at exactly these structural relationships. However, NOT everything needs to go in the graph. Only structural and relational data; procedural knowledge stays in the vector store.</p>
+
+    <div class="pro-con">
+      <div class="pro">
+        <h4 style="color:var(--green);">What belongs IN the Knowledge Graph</h4>
+        <ul>
+          <li><strong>Chart of Accounts hierarchy:</strong> Account 6 → 62 → 621 → 6211 parent-child, debit/credit nature, which Circular defines it</li>
+          <li><strong>Regulation dependency graph:</strong> Circular 99 → supersedes → Circular 200; Decree 70 → amends → Decree 123; Law 48/2024 → governs → VAT rates</li>
+          <li><strong>Account → Tax type mapping:</strong> TK 1331 → Deductible VAT; TK 3331 → Output VAT; TK 3334 → CIT payable</li>
+          <li><strong>Transaction pattern templates:</strong> "Purchase on credit" → Dr 152 + Dr 1331, Cr 331 (linked as pattern nodes)</li>
+          <li><strong>Vendor/Customer → Invoice → Journal Entry → GL Account links</strong> (per-tenant operational data)</li>
+          <li><strong>Effective date relationships:</strong> "TK 158 → defined_by → Circular 99, Article X → effective_from → 2026-01-01"</li>
+        </ul>
+      </div>
+      <div class="con">
+        <h4 style="color:var(--red);">What stays OUT (Vector Store only)</h4>
+        <ul>
+          <li><strong>Full text of laws and circulars</strong> — too long, no relational structure, better served by semantic search</li>
+          <li><strong>Practical how-to guides</strong> — MISA articles, Big-4 explainers, training content → pure retrieval task</li>
+          <li><strong>Q&A pairs from công văn</strong> — factoid retrieval, not multi-hop reasoning</li>
+          <li><strong>Journal entry worked examples</strong> — few-shot examples for the LLM, not graph traversal</li>
+          <li><strong>Tax rate tables</strong> — simple lookup table, overkill for graph</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graph schema -->
+  <div class="card" style="margin-top:20px;">
+    <h3 style="color:var(--teal);">📐 Proposed Graph Schema (Apache AGE)</h3>
+    <p style="margin-bottom:16px;">Lean schema — only nodes and edges that enable multi-hop queries the vector store can't answer alone.</p>
+    <div style="font-family:'JetBrains Mono'; font-size:0.78rem; background:var(--surface2); padding:20px; border-radius:10px; overflow-x:auto; line-height:1.8; color:var(--dim);">
+<span style="color:var(--green);">// Node types</span><br>
+(:Account {code, name, level, parent_code, nature, circular_ref, effective_from})<br>
+(:Regulation {number, title, issuing_authority, effective_date, superseded_by, status})<br>
+(:TaxType {code, name, current_rate, rate_history[]})<br>
+(:TransactionPattern {name, description, debit_accounts[], credit_accounts[]})<br>
+(:Industry {code, name})<br>
+(:FinancialStatement {template_code, name, line_items[]})<br>
+<br>
+<span style="color:var(--blue);">// Edge types</span><br>
+(:Account)-[:CHILD_OF]->(:Account)<br>
+(:Account)-[:DEFINED_BY]->(:Regulation)<br>
+(:Account)-[:MAPS_TO_TAX]->(:TaxType)<br>
+(:Account)-[:APPEARS_IN]->(:FinancialStatement)<br>
+(:Regulation)-[:SUPERSEDES]->(:Regulation)<br>
+(:Regulation)-[:AMENDS]->(:Regulation)<br>
+(:TransactionPattern)-[:USES_DEBIT]->(:Account)<br>
+(:TransactionPattern)-[:USES_CREDIT]->(:Account)<br>
+(:TransactionPattern)-[:APPLICABLE_TO]->(:Industry)<br>
+(:TaxType)-[:GOVERNED_BY]->(:Regulation)<br>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px;">
+    <h3 style="color:var(--orange);">🔍 Example Multi-Hop Queries Only the Graph Can Answer Efficiently</h3>
+    <ul class="clean">
+      <li>"Which accounts were <strong>added or changed</strong> by Circular 99 compared to Circular 200?" → Traverse DEFINED_BY edges, compare</li>
+      <li>"What GL accounts should I use to record a <strong>purchase of fixed assets on credit with VAT</strong>?" → TransactionPattern → USES_DEBIT/CREDIT → Account</li>
+      <li>"Show me all <strong>expense accounts that roll up to line item 'Cost of Goods Sold'</strong> on the P&L" → Account ← CHILD_OF chain ← APPEARS_IN → B02-DN</li>
+      <li>"Which <strong>regulations govern account TK 3334</strong> (CIT payable) and are currently in effect?" → Account → MAPS_TO_TAX → TaxType → GOVERNED_BY → Regulation (status=CURRENT)</li>
+      <li>"If Circular 99 changes the definition of TK 158, <strong>which transaction patterns are affected</strong>?" → Regulation → DEFINED_BY ← Account ← USES_DEBIT/CREDIT ← TransactionPattern</li>
+    </ul>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num" style="color:var(--green);">~300</div><div class="lbl">Account nodes (Circular 99 CoA)</div></div>
+    <div class="stat"><div class="num" style="color:var(--blue);">~150</div><div class="lbl">Regulation nodes (active laws)</div></div>
+    <div class="stat"><div class="num" style="color:var(--purple);">~200</div><div class="lbl">Transaction pattern nodes</div></div>
+    <div class="stat"><div class="num" style="color:var(--orange);">~2,000</div><div class="lbl">Edges (relationships)</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PANE 4: USER STORIES                                   -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="p4" class="pane">
+<div class="sec">
+  <div class="sec-title"><div class="ico" style="background:rgba(236,72,153,0.15);color:var(--pink);">👤</div>User Stories — Verifying Knowledge Demands</div>
+  <p class="sec-desc">Real scenarios that test whether the agent's knowledge is complete, accurate, and actionable. Each story maps to specific knowledge requirements.</p>
+
+  <!-- Story 1 -->
+  <div class="story">
+    <span class="tag" style="background:rgba(34,197,94,0.15);color:var(--green);">Daily — Invoice Processing</span>
+    <h4>US-01: Record a purchase invoice to the general ledger</h4>
+    <div class="scenario">
+      <strong>User action:</strong> Uploads a PDF invoice from vendor "Công ty TNHH ABC" for office supplies. Invoice shows: Total 11,000,000 VND (goods: 10,000,000 VND + VAT 10%: 1,000,000 VND). PO #2024-0156 exists in the system.<br><br>
+      <strong>User says:</strong> "Hạch toán hóa đơn này giúp tôi" (Record this invoice for me)
+    </div>
+    <p class="expect">
+      <strong>Agent must know:</strong> OCR the invoice fields → validate against PO → classify as office expense (TK 6422 or TK 6421 depending on company's CoA structure) → create journal entry: <strong>Dr 6422</strong> (Management expense) 10,000,000 / <strong>Dr 1331</strong> (Deductible input VAT) 1,000,000 / <strong>Cr 331</strong> (Trade payables - ABC) 11,000,000. Must confirm the VAT is currently 8% or 10% (check if office supplies qualify for the 2% reduction under Resolution 204/2025). Must verify e-invoice validity format per Decree 70/2025.
+    </p>
+  </div>
+
+  <!-- Story 2 -->
+  <div class="story">
+    <span class="tag" style="background:rgba(59,130,246,0.15);color:var(--blue);">Daily — Revenue Recognition</span>
+    <h4>US-02: Record a sales transaction with exported goods</h4>
+    <div class="scenario">
+      <strong>User action:</strong> Provides a sales contract for export of garments to a US buyer. FOB value: 50,000 USD. Exchange rate at transaction date: 25,450 VND/USD. VAT rate for exports: 0%.<br><br>
+      <strong>User says:</strong> "Record this export sale. The goods shipped yesterday."
+    </div>
+    <p class="expect">
+      <strong>Agent must know:</strong> Export sales are VAT 0% (not VAT-exempt — important distinction for input VAT deduction). Revenue recognized when risk/reward transfers (VAS, not IFRS control model). Journal entry: <strong>Dr 131</strong> (Trade receivable) 1,272,500,000 / <strong>Cr 5111</strong> (Revenue - goods) 1,272,500,000. Must use the actual exchange rate per Circular 99 Article 31. Must know that export requires customs declaration as supporting document.
+    </p>
+  </div>
+
+  <!-- Story 3 -->
+  <div class="story">
+    <span class="tag" style="background:rgba(139,92,246,0.15);color:var(--purple);">Monthly — Period Close</span>
+    <h4>US-03: Calculate monthly depreciation for all fixed assets</h4>
+    <div class="scenario">
+      <strong>User action:</strong> End of month. Company has 15 fixed assets with varying useful lives (3-10 years).<br><br>
+      <strong>User says:</strong> "Run monthly depreciation calculation and create the journal entries."
+    </div>
+    <p class="expect">
+      <strong>Agent must know:</strong> Depreciation method (straight-line is standard VAS). Useful life limits per Circular 45/2013 (e.g., computers: 3-5 years, vehicles: 6-10 years, buildings: 25-50 years). Journal entry per asset: <strong>Dr 6274</strong> (Factory depreciation) or <strong>Dr 6424</strong> (Admin depreciation) / <strong>Cr 214</strong> (Accumulated depreciation). Must respect minimum capitalization threshold (currently 30M VND and useful life >1 year per Circular 45). Must flag any fully depreciated assets still in use.
+    </p>
+  </div>
+
+  <!-- Story 4 -->
+  <div class="story">
+    <span class="tag" style="background:rgba(249,115,22,0.15);color:var(--orange);">Quarterly — Tax Filing</span>
+    <h4>US-04: Prepare quarterly VAT declaration</h4>
+    <div class="scenario">
+      <strong>User action:</strong> End of Q1. Company uses credit-invoice method (khấu trừ).<br><br>
+      <strong>User says:</strong> "Prepare the VAT return for Q1. Tell me if we owe or get a refund."
+    </div>
+    <p class="expect">
+      <strong>Agent must know:</strong> Aggregate all TK 33311 (Output VAT) and TK 1331 (Input VAT) for Q1. Apply the 8% reduced rate where applicable per Resolution 204/2025. Calculate: Output VAT - Deductible Input VAT = VAT payable or refundable. If refundable and >300M VND and meets criteria, advise on refund application. Generate data in HTKK-compatible format. Must know VAT filing deadline: 30th of month following quarter end.
+    </p>
+  </div>
+
+  <!-- Story 5 -->
+  <div class="story">
+    <span class="tag" style="background:rgba(239,68,68,0.15);color:var(--red);">Compliance — Regulation Change</span>
+    <h4>US-05: "What changed in Circular 99 vs. Circular 200?"</h4>
+    <div class="scenario">
+      <strong>User says:</strong> "We're transitioning to Circular 99 for FY2026. What are the key changes I need to prepare for? Specifically for our Chart of Accounts and financial statement templates."
+    </div>
+    <p class="expect">
+      <strong>Agent must know (via Knowledge Graph):</strong> Traverse the Regulation graph to identify: Circular 99 now allows flexible CoA (vs. rigid prescribed CoA in TT200). New accounts added (e.g., biological assets). Enterprises must now issue Internal Governance Accounting Policy (IGAP). Electronic vouchers have same legal weight as paper. Financial statement templates updated. The agent must produce a side-by-side comparison and a migration checklist.
+    </p>
+  </div>
+
+  <!-- Story 6 -->
+  <div class="story">
+    <span class="tag" style="background:rgba(20,184,166,0.15);color:var(--teal);">Complex — Contract Analysis</span>
+    <h4>US-06: Analyze a service contract for correct accounting treatment</h4>
+    <div class="scenario">
+      <strong>User action:</strong> Uploads a 12-month IT service contract worth 240M VND (20M/month). Payment: 50% upfront, 50% after 6 months. Service starts March 1, 2026.<br><br>
+      <strong>User says:</strong> "How do I account for this contract? We received the first 120M today."
+    </div>
+    <p class="expect">
+      <strong>Agent must know:</strong> The 120M VND received upfront is NOT revenue yet — it's a liability (TK 3387 - Unearned revenue). Revenue recognized monthly at 20M VND as service is delivered. Journal entries: On receipt: Dr 112 (Bank) 120M / Cr 3387 (Unearned revenue) 120M. Monthly: Dr 3387 20M / Cr 5113 (Service revenue) 20M. Must handle VAT timing: e-invoice must be issued per payment milestone per Decree 70/2025 rules. Must know VAS revenue recognition criteria.
+    </p>
+  </div>
+
+  <!-- Knowledge demand summary -->
+  <div class="card" style="margin-top:24px; border-left:3px solid var(--gold);">
+    <h3 style="color:var(--gold);">📊 Knowledge Demand Matrix from User Stories</h3>
+    <table class="src-table" style="margin:12px 0 0;">
+      <thead><tr><th>Knowledge Area</th><th>Required For</th><th>Source Tier</th><th>Graph Needed?</th></tr></thead>
+      <tbody>
+        <tr><td>Chart of Accounts (GL codes + hierarchy)</td><td>US-01 to US-06 — ALL stories</td><td><span class="trust t1">Tier 1</span></td><td style="color:var(--green);">✓ Yes</td></tr>
+        <tr><td>VAT rates & rules (8%/10%/0%, deduction rules)</td><td>US-01, US-02, US-04</td><td><span class="trust t1">Tier 1</span></td><td>No (lookup table)</td></tr>
+        <tr><td>Journal entry patterns per transaction</td><td>US-01 to US-06</td><td><span class="trust t3">Tier 3-4</span> validated</td><td style="color:var(--green);">✓ Yes (templates)</td></tr>
+        <tr><td>Revenue recognition rules (VAS)</td><td>US-02, US-06</td><td><span class="trust t1">Tier 1</span></td><td>No (retrieval)</td></tr>
+        <tr><td>Depreciation rules (Circular 45/2013)</td><td>US-03</td><td><span class="trust t1">Tier 1</span></td><td>No (lookup)</td></tr>
+        <tr><td>E-invoice compliance (Decree 70/2025)</td><td>US-01, US-04, US-06</td><td><span class="trust t1">Tier 1</span></td><td>No (retrieval)</td></tr>
+        <tr><td>Regulation change tracking</td><td>US-05</td><td><span class="trust t1">Tier 1</span></td><td style="color:var(--green);">✓ Yes (SUPERSEDES edges)</td></tr>
+        <tr><td>FX rate handling</td><td>US-02</td><td><span class="trust t1">Tier 1</span></td><td>No (retrieval)</td></tr>
+        <tr><td>Tax filing deadlines & procedures</td><td>US-04</td><td><span class="trust t2">Tier 2</span></td><td>No (calendar)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ -->
+<!-- PANE 5: FULL ARCHITECTURE                              -->
+<!-- ═══════════════════════════════════════════════════════ -->
+<div id="p5" class="pane">
+<div class="sec">
+  <div class="sec-title"><div class="ico" style="background:rgba(234,179,8,0.15);color:var(--gold);">🏗️</div>Full Learning & Operating Architecture</div>
+  <p class="sec-desc">How the agent learns, reasons, acts with strict accuracy, and continuously improves — the complete picture.</p>
+
+  <div class="mega">
+    <h3 style="color:var(--gold);">Accounting Agent — Learn → Reason → Act → Verify Loop</h3>
+
+    <!-- Layer 1: Sources -->
+    <div class="layer" style="background:rgba(34,197,94,0.03); border-color:rgba(34,197,94,0.3);">
+      <span class="layer-label" style="background:var(--surface); color:var(--green);">Layer 1 — Knowledge Sources</span>
+      <div class="items">
+        <div class="item"><strong style="color:var(--green);">🏛️ Tier 1 — Law</strong><span>thuvienphapluat.vn, gdt.gov.vn, mof.gov.vn, chinhphu.vn</span></div>
+        <div class="item"><strong style="color:var(--blue);">📋 Tier 2 — Guidance</strong><span>Công văn, Provincial Tax Depts, GDT FAQs</span></div>
+        <div class="item"><strong style="color:var(--orange);">📊 Tier 3 — Expert</strong><span>PwC, KPMG, EY, Deloitte, Vietnam Briefing, law firms</span></div>
+        <div class="item"><strong style="color:var(--red);">💬 Tier 4 — Community</strong><span>amis.misa.vn, ketoan.vn, ketoanleanh.edu.vn</span></div>
+      </div>
+    </div>
+
+    <div class="layer-arrow">▼ Crawl → Parse → Validate → Filter ▼</div>
+
+    <!-- Layer 2: Knowledge Store -->
+    <div class="layer" style="background:rgba(59,130,246,0.03); border-color:rgba(59,130,246,0.3);">
+      <span class="layer-label" style="background:var(--surface); color:var(--blue);">Layer 2 — Knowledge Store (Dual)</span>
+      <div class="items">
+        <div class="item" style="border-color:rgba(139,92,246,0.4);">
+          <strong style="color:var(--purple);">🕸️ Knowledge Graph (Apache AGE)</strong>
+          <span>CoA hierarchy, regulation dependencies, account→tax mappings, transaction pattern templates, financial statement line item links</span>
+        </div>
+        <div class="item" style="border-color:rgba(6,182,212,0.4);">
+          <strong style="color:var(--cyan);">🔍 Vector Store (Qdrant)</strong>
+          <span>Full text of laws & circulars (chunked), Big-4 analyses, practical guides, worked examples, Q&A from công văn, training content</span>
+        </div>
+        <div class="item" style="border-color:rgba(249,115,22,0.4);">
+          <strong style="color:var(--orange);">📅 Structured Tables (PostgreSQL)</strong>
+          <span>Tax rate lookup, depreciation schedules, filing deadline calendar, exchange rate history, e-invoice validation rules</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="layer-arrow">▼ Hybrid Retrieval: Graph traversal + Vector search + Table lookup ▼</div>
+
+    <!-- Layer 3: Reasoning Engine -->
+    <div class="layer" style="background:rgba(139,92,246,0.03); border-color:rgba(139,92,246,0.3);">
+      <span class="layer-label" style="background:var(--surface); color:var(--purple);">Layer 3 — Reasoning Engine (Pipeline Steps)</span>
+      <div class="items">
+        <div class="item"><strong style="color:var(--teal);">🎯 Intent Classifier</strong><span>Transaction recording? Tax query? Report generation? Regulation lookup?</span></div>
+        <div class="item"><strong style="color:var(--blue);">🔍 Hybrid Retriever</strong><span>Graph + Vector + Table. Merge results. Rank by trust tier.</span></div>
+        <div class="item"><strong style="color:var(--purple);">🧮 Accounting Logic</strong><span>Double-entry validation, CoA lookup, tax calculation, FX conversion</span></div>
+        <div class="item"><strong style="color:var(--gold);">📝 Response Generator</strong><span>LLM generates with retrieved context. Always cites regulation numbers.</span></div>
+      </div>
+    </div>
+
+    <div class="layer-arrow">▼ Draft output (journal entry, report, advice) ▼</div>
+
+    <!-- Layer 4: Verification -->
+    <div class="layer" style="background:rgba(239,68,68,0.03); border-color:rgba(239,68,68,0.3);">
+      <span class="layer-label" style="background:var(--surface); color:var(--red);">Layer 4 — Verification Gates (Zero Error Tolerance)</span>
+      <div class="items">
+        <div class="item"><strong style="color:var(--red);">⚖️ Double-Entry Check</strong><span>Total Debits = Total Credits? If not → reject, recalculate.</span></div>
+        <div class="item"><strong style="color:var(--red);">🏛️ CoA Validity</strong><span>Every GL code exists in current CoA? Correct debit/credit nature?</span></div>
+        <div class="item"><strong style="color:var(--red);">💰 Tax Arithmetic</strong><span>VAT calculation matches rate × base? CIT calculation correct?</span></div>
+        <div class="item"><strong style="color:var(--red);">📅 Effective Date</strong><span>Is the cited regulation still in effect? Not superseded?</span></div>
+        <div class="item"><strong style="color:var(--red);">🔗 Source Citation</strong><span>Every claim references a Tier 1-3 source? No unsourced advice?</span></div>
+        <div class="item"><strong style="color:var(--orange);">⚠️ Confidence Gate</strong><span>Confidence < 0.85 → escalate to human. Never guess.</span></div>
+      </div>
+    </div>
+
+    <div class="layer-arrow">▼ Verified output → User (with audit trail) ▼</div>
+
+    <!-- Layer 5: Output + Learning -->
+    <div class="layer" style="background:rgba(234,179,8,0.03); border-color:rgba(234,179,8,0.3);">
+      <span class="layer-label" style="background:var(--surface); color:var(--gold);">Layer 5 — Output & Continuous Learning</span>
+      <div class="items">
+        <div class="item"><strong style="color:var(--green);">✅ Committed Entry</strong><span>Journal entry saved with full audit trail: who, what, when, why, which regulation</span></div>
+        <div class="item"><strong style="color:var(--blue);">📊 OTel Trace</strong><span>Every step traced → ClickHouse. Meta-agent observes accuracy patterns.</span></div>
+        <div class="item"><strong style="color:var(--purple);">🔄 Correction Loop</strong><span>Human corrections feed back as training signal. DPO on accepted vs. rejected entries.</span></div>
+        <div class="item"><strong style="color:var(--gold);">🧠 Meta-Agent</strong><span>Monitors: classification accuracy, escalation rate, processing time → optimizes pipeline config.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Three pillars of trust -->
+  <div class="sec-title" style="font-size:1.3rem; margin-top:40px;"><div class="ico" style="background:rgba(20,184,166,0.15);color:var(--teal);">🛡️</div>Three Pillars of Trust & Accuracy</div>
+
+  <div class="g3">
+    <div class="card" style="border-top:3px solid var(--green);">
+      <h3 style="color:var(--green);">Pillar 1: Knowledge Integrity</h3>
+      <ul class="clean">
+        <li><strong>Tiered trust system</strong> — law overrides opinion, always</li>
+        <li><strong>Mandatory citations</strong> — every output references regulation numbers</li>
+        <li><strong>Effective date tracking</strong> — superseded rules auto-deprecated</li>
+        <li><strong>Cross-validation</strong> — Tier 4 content verified against Tier 1 before operational use</li>
+        <li><strong>Vietnamese original priority</strong> — English translations are secondary</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--blue);">
+      <h3 style="color:var(--blue);">Pillar 2: Computational Accuracy</h3>
+      <ul class="clean">
+        <li><strong>Double-entry validation</strong> — every journal entry checked: Dr = Cr</li>
+        <li><strong>Deterministic tax calculations</strong> — code-based, not LLM-generated math</li>
+        <li><strong>CoA constraint checking</strong> — GL codes validated against graph schema</li>
+        <li><strong>Reconciliation loops</strong> — auto-check totals before period close</li>
+        <li><strong>Decimal precision</strong> — VND has no subunit, enforce integer arithmetic</li>
+      </ul>
+    </div>
+    <div class="card" style="border-top:3px solid var(--purple);">
+      <h3 style="color:var(--purple);">Pillar 3: Operational Safety</h3>
+      <ul class="clean">
+        <li><strong>Confidence-based escalation</strong> — < 0.85 confidence → human review</li>
+        <li><strong>Approval gates</strong> — payroll, tax filings, period close require human sign-off</li>
+        <li><strong>Immutable audit trail</strong> — every action logged with user, timestamp, source, reasoning</li>
+        <li><strong>Shadow testing</strong> — regulation changes tested on historical data before live deployment</li>
+        <li><strong>Role-based access</strong> — accountant vs. manager vs. auditor see different capabilities</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Expansion roadmap -->
+  <div class="card" style="margin-top:24px;">
+    <h3 style="color:var(--cyan);">🗺️ Country Expansion Model</h3>
+    <p style="margin-bottom:12px;">The architecture is designed for Vietnam first, but the <strong>tiered source + knowledge graph + vector store pattern</strong> is replicable per country. Each country gets:</p>
+    <div class="g4">
+      <div style="padding:12px; background:var(--surface2); border-radius:8px; text-align:center;">
+        <strong style="color:var(--green); font-size:0.85rem;">🇻🇳 Vietnam</strong>
+        <p style="font-size:0.75rem; color:var(--dim);">Now — VAS, Circular 99, 26 standards, GDT regulations</p>
+      </div>
+      <div style="padding:12px; background:var(--surface2); border-radius:8px; text-align:center;">
+        <strong style="color:var(--blue); font-size:0.85rem;">🇸🇬 Singapore</strong>
+        <p style="font-size:0.75rem; color:var(--dim);">Next — SFRS(I), IRAS, GST, ACRA</p>
+      </div>
+      <div style="padding:12px; background:var(--surface2); border-radius:8px; text-align:center;">
+        <strong style="color:var(--purple); font-size:0.85rem;">🇹🇭 Thailand</strong>
+        <p style="font-size:0.75rem; color:var(--dim);">Planned — TFRS, Revenue Dept, DBD</p>
+      </div>
+      <div style="padding:12px; background:var(--surface2); border-radius:8px; text-align:center;">
+        <strong style="color:var(--orange); font-size:0.85rem;">🇮🇩 Indonesia</strong>
+        <p style="font-size:0.75rem; color:var(--dim);">Planned — SAK, DJP, e-Faktur</p>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+function go(id) {
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  const idx = ['p1','p2','p3','p4','p5'].indexOf(id);
+  document.querySelectorAll('.tab')[idx].classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>
